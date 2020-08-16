@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/TextIO.unity
+- path: Assets/Scenes/TextIO.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
