@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,6 +19,11 @@ public class CommandProcessor
         TriggerEvent triggered;
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         triggered = playerObj.GetComponent<TriggerEvent>();
+        Text storyText;
+        GameObject outputField;
+        outputField = GameObject.FindGameObjectWithTag("Narrative");
+        storyText = outputField.GetComponent<Text>();
+
         String strResult = "Do not understand";;
 			pCmdStr = pCmdStr.ToLower();
 			String[] parts = pCmdStr.Split(' '); // tokenise the command
@@ -43,6 +49,7 @@ public class CommandProcessor
                                 {
                                     Debug.Log("Not enough space!");
                                     strResult = "You dont have enough space for " + triggered.currentInterObj.name + "!";
+                                    storyText.text = Convert.ToString(GameModel.currentEvent);
                                 }
                                 else
                                 {
@@ -90,11 +97,37 @@ public class CommandProcessor
 
                                 break;
                             case "south":
-                            Debug.Log("Got go South");
-                            nextLocale = GameModel.currentLocale.getLocation("South");
+                                Debug.Log("Got go South");
+                                nextLocale = GameModel.currentLocale.getLocation("South");
+                                if (nextLocale == null)
+                                {
+                                    strResult = "Sorry can't go South " + GameModel.currentLocale.Name + " " + GameModel.currentLocale.Story;
+                                }
+                                else
+                                {
+                                    GameModel.currentLocale = nextLocale;
+                                    strResult = GameModel.currentLocale.Name + " " + GameModel.currentLocale.Story;
+                                }
+                            break;
+                            case "east":
+                                Debug.Log("Got go East");
+                                nextLocale = GameModel.currentLocale.getLocation("East");
+                                if (nextLocale == null)
+                                {
+                                    strResult = "Sorry can't go East " + GameModel.currentLocale.Name + " " + GameModel.currentLocale.Story;
+                                }
+                                else
+                                {
+                                    GameModel.currentLocale = nextLocale;
+                                    strResult = GameModel.currentLocale.Name + " " + GameModel.currentLocale.Story;
+                                }
+                            break;
+                        case "west":
+                            Debug.Log("Got go West");
+                            nextLocale = GameModel.currentLocale.getLocation("West");
                             if (nextLocale == null)
                             {
-                                strResult = "Sorry can't go South " + GameModel.currentLocale.Name + " " + GameModel.currentLocale.Story;
+                                strResult = "Sorry can't go West " + GameModel.currentLocale.Name + " " + GameModel.currentLocale.Story;
                             }
                             else
                             {
@@ -102,7 +135,7 @@ public class CommandProcessor
                                 strResult = GameModel.currentLocale.Name + " " + GameModel.currentLocale.Story;
                             }
                             break;
-                            default:
+                        default:
                                 Debug.Log(" do not know how to go there");
                                 strResult = "Do not know how to go there";
                                 break;
@@ -145,6 +178,9 @@ public class CommandProcessor
                         Debug.Log("Failed steal");
                         strResult = "You were caught!";
                     }
+                    break;
+                case "":
+                    strResult = GameModel.currentLocale.Name;
                     break;
                 default:
                         Debug.Log("Do not understand");

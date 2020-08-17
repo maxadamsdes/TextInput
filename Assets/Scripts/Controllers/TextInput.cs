@@ -7,12 +7,14 @@ public class TextInput : MonoBehaviour {
 	InputField.SubmitEvent se;
 	InputField.OnChangeEvent ce;
 	public Text output;
+	public Text outputStory;
 
 	// Use this for initialization
 	void Start () {
-        output.text = GameModel.currentLocale.Name + " " + GameModel.currentLocale.Story;
+		output.text = GameModel.currentLocale.Name;
+		outputStory.text = GameModel.currentLocale.Story;
 
-        input = this.GetComponent<InputField>();
+		input = this.GetComponent<InputField>();
 		se = new InputField.SubmitEvent();
 		se.AddListener(SubmitInput);
 		input.onEndEdit = se;
@@ -24,7 +26,9 @@ public class TextInput : MonoBehaviour {
 
         //  DO THIS LATER 
          CommandProcessor aCmd = new CommandProcessor();
+
          output.text = aCmd.Parse(arg0);
+
         //output.text = arg0;
 
 		input.text = "";
