@@ -46,7 +46,7 @@ public static class GameModel
 
     public static void MakeGame()
     {
-        Location forest, castle, beach, river;
+        Location forest, cave, beach, river, highway;
         currentLocale = new Location
         {
             Name = "Forest",
@@ -57,15 +57,15 @@ public static class GameModel
 
         // forest
         forest = currentLocale;
-        forest.addLocation("North", "Castle", "Crocodiles");
+        forest.addLocation("North", "Cave", "Lava");
         forest.addLocation("East", "Beach", "Sharks");
         forest.addLocation("West", "Crossroads", "Highwaymen!");
 
         // castle
-        castle = forest.getLocation("North");
-        castle.addLocation("South", forest);
-        castle.addLocation("East", "River", "Pebbles");
-        river = castle.getLocation("East");
+        cave = forest.getLocation("North");
+        cave.addLocation("South", forest);
+        cave.addLocation("East", "River", "Pebbles");
+        river = cave.getLocation("East");
 
         // beach
         beach = forest.getLocation("East");
@@ -73,9 +73,12 @@ public static class GameModel
         beach.addLocation("North", river);
 
         //river
-        river.addLocation("West", castle);
+        river.addLocation("West", cave);
         river.addLocation("South", beach);
 
+        //Highway
+        highway = forest.getLocation("West");
+        highway.addLocation("East", forest);
     }
 
 

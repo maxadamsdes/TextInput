@@ -9,8 +9,10 @@ public class MenuController : MonoBehaviour
     public GameObject menu;
     public GameObject menuButton;
     public InputField input;
-    public GameObject textField;
+    public Text textField;
     public GameObject playerObj;
+    public GameObject audioOnIcon;
+    public GameObject audioOffIcon;
     public string itemName;
     public string itemTag;
     private GameObject item;
@@ -52,7 +54,6 @@ public class MenuController : MonoBehaviour
             menuButton.SetActive(false);
             menu.SetActive(true);
             input.ActivateInputField();
-            textField.SetActive(true);
             playerObj.GetComponent<PlayerMovement>().enabled = false;
             playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             m_OrthographicCamera.orthographic = true;
@@ -63,8 +64,8 @@ public class MenuController : MonoBehaviour
     public void exitText()
     {
         isShowing = false;
+        textField.text = "";
         menu.SetActive(false);
-        textField.SetActive(false);
         menuButton.SetActive(true);
         playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
         playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -86,4 +87,34 @@ public class MenuController : MonoBehaviour
 
         }
     }
+    public void ToggleSound()
+    {
+        if (PlayerPrefs.GetInt("Muted", 0) == 0)
+        {
+            PlayerPrefs.SetInt("Muted", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Muted", 0);
+        }
+        SetSoundState();
+    }
+
+    private void SetSoundState()
+    {
+        if (PlayerPrefs.GetInt("Muted", 0) == 0)
+        {
+            AudioListener.volume = 1;
+            audioOnIcon.SetActive(true);
+            audioOffIcon.SetActive(false);
+        }
+        else
+        {
+            AudioListener.volume = 0;
+            audioOnIcon.SetActive(false);
+            audioOffIcon.SetActive(true);
+        }
+
+    }
+
 }

@@ -11,8 +11,8 @@ public class TextInput : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		output.text = GameModel.currentLocale.Name;
-		outputStory.text = GameModel.currentLocale.Story;
+		//output.text = GameModel.currentLocale.Name;
+		//outputStory.text = GameModel.currentLocale.Story;
 
 		input = this.GetComponent<InputField>();
 		se = new InputField.SubmitEvent();
@@ -28,8 +28,6 @@ public class TextInput : MonoBehaviour {
          CommandProcessor aCmd = new CommandProcessor();
 
          output.text = aCmd.Parse(arg0);
-
-        //output.text = arg0;
 
 		input.text = "";
 		input.ActivateInputField();
