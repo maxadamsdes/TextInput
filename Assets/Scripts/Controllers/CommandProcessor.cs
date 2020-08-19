@@ -17,10 +17,9 @@ public class CommandProcessor
         GameObject storyNarrative = GameObject.FindGameObjectWithTag("Story");
         triggered = playerObj.GetComponent<TriggerEvent>();
         Animator anim = triggered.anim;
-        String strResult = "Do not understand";
+        String strResult = GameModel.currentLocale.Name;
 		pCmdStr = pCmdStr.ToLower();
 		String[] parts = pCmdStr.Split(' '); // tokenise the command
-        Location nextLocale;
 
         if (parts.Length > 0)
         {// process the tokens
@@ -79,57 +78,65 @@ public class CommandProcessor
                     {
                         case "north":
                             Debug.Log("Got go North");
-                            nextLocale = GameModel.currentLocale.getLocation("North");
-                            if (nextLocale == null)
+                            triggered.nextLocale = GameModel.currentLocale.getLocation("North");
+                            if (triggered.nextLocale == null)
                                 strResult = "Sorry can't go North | " + GameModel.currentLocale.Name;
                             else
                             {
-                                GameModel.currentLocale = nextLocale;
+                                triggered.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
-                                storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
+                                //GameModel.currentLocale = nextLocale;
+                                //strResult = GameModel.currentLocale.Name;
+                                //storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
                             }
 
                             break;
                         case "south":
                             Debug.Log("Got go South");
-                            nextLocale = GameModel.currentLocale.getLocation("South");
-                            if (nextLocale == null)
+                            triggered.nextLocale = GameModel.currentLocale.getLocation("South");
+                            if (triggered.nextLocale == null)
                             {
                                 strResult = "Sorry can't go South | " + GameModel.currentLocale.Name;
                             }
                             else
                             {
-                                GameModel.currentLocale = nextLocale;
+                                triggered.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
-                                storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
+                                //GameModel.currentLocale = nextLocale;
+                                //strResult = GameModel.currentLocale.Name;
+                                //storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
                             }
                             break;
                         case "east":
                             Debug.Log("Got go East");
-                            nextLocale = GameModel.currentLocale.getLocation("East");
-                            if (nextLocale == null)
+                            triggered.nextLocale = GameModel.currentLocale.getLocation("East");
+                            if (triggered.nextLocale == null)
                             {
                                 strResult = "Sorry can't go East | " + GameModel.currentLocale.Name;
                             }
                             else
                             {
-                                GameModel.currentLocale = nextLocale;
+                                triggered.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
-                                storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
+                                //GameModel.currentLocale = nextLocale;
+                                //strResult = GameModel.currentLocale.Name;
+                                //storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
                             }
                             break;
                         case "west":
                             Debug.Log("Got go West");
-                            nextLocale = GameModel.currentLocale.getLocation("West");
-                            if (nextLocale == null)
+                            triggered.nextLocale = GameModel.currentLocale.getLocation("West");
+                            if (triggered.nextLocale == null)
                             {
                                 strResult = "Sorry can't go West | " + GameModel.currentLocale.Name;
                             }
                             else
                             {
-                                GameModel.currentLocale = nextLocale;
+                                triggered.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
-                                storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
+                                //GameModel.currentLocale = nextLocale;
+                                //strResult = GameModel.currentLocale.Name;
+                                //storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
                             }
                             break;
                         default:

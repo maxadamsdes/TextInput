@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\Controllers\MenuController.cs" />
     <Compile Include="Assets\Scripts\Controllers\ParallaxBackground.cs" />
     <Compile Include="Assets\Scripts\Controllers\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Controllers\ReliableOnTriggerExit.cs" />
     <Compile Include="Assets\Scripts\Controllers\SceneManagerScript.cs" />
     <Compile Include="Assets\Scripts\Controllers\TextInput.cs" />
     <Compile Include="Assets\Scripts\Models\Animator.cs" />
@@ -87,6 +88,8 @@
     <Compile Include="Assets\Scripts\Models\Inventory.cs" />
     <Compile Include="Assets\Scripts\Models\Location.cs" />
     <Compile Include="Assets\Scripts\Models\Player.cs" />
+    <Compile Include="Assets\Scripts\Models\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\Models\SaveSystem.cs" />
     <Compile Include="Assets\Scripts\Models\TriggerEvent.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.5f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

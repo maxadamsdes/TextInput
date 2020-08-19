@@ -46,7 +46,7 @@ public static class GameModel
 
     public static void MakeGame()
     {
-        Location forest, cave, beach, river, highway;
+        Location forest, cave, cave2, beach, river, highway, ocean;
         currentLocale = new Location
         {
             Name = "Forest",
@@ -59,22 +59,32 @@ public static class GameModel
         forest = currentLocale;
         forest.addLocation("North", "Cave", "Lava");
         forest.addLocation("East", "Beach", "Sharks");
-        forest.addLocation("West", "Crossroads", "Highwaymen!");
+        forest.addLocation("West", "Highway", "Highwaymen!");
 
-        // castle
+        // cave
         cave = forest.getLocation("North");
         cave.addLocation("South", forest);
-        cave.addLocation("East", "River", "Pebbles");
-        river = cave.getLocation("East");
+        cave.addLocation("East", "Cave2", "Enemies?");
+
+        // cave 2
+        cave2 = cave.getLocation("East");
+        cave2.addLocation("West", cave);
+        cave2.addLocation("East", "River", "Bridge");
+        river = cave2.getLocation("East");
 
         // beach
         beach = forest.getLocation("East");
         beach.addLocation("West", forest);
-        beach.addLocation("North", river);
+        beach.addLocation("East", "Ocean", "I guess you're amphibious");
+        ocean = beach.getLocation("East");
 
-        //river
-        river.addLocation("West", cave);
-        river.addLocation("South", beach);
+        // river
+        river.addLocation("West", cave2);
+        river.addLocation("South", ocean);
+
+        // ocean
+        ocean.addLocation("North", river);
+        ocean.addLocation("West", beach);
 
         //Highway
         highway = forest.getLocation("West");
