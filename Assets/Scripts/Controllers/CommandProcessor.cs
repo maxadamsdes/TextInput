@@ -74,6 +74,7 @@ public class CommandProcessor
 
                     break;
                 case "go":
+
                     switch (parts[1])
                     {
                         case "north":
@@ -157,6 +158,29 @@ public class CommandProcessor
                     }  
                     break;
 
+                case "enter":
+                    if ((parts.Length == 1) && (triggered.currentInterObj.tag == "Entrance"))
+                    {
+                        var nextLocale = GameModel.currentLocale.getLocation(triggered.currentInterObj.name);
+                        Debug.Log("Got go " + nextLocale);
+                        if (nextLocale == null)
+                        {
+                            triggered.storyHead.text = "Sorry can't go to " + nextLocale + " | " + GameModel.currentLocale.Name;
+                        }
+                        else
+                        {
+                            triggered.LoadLocation();
+                        }
+                        triggered.failsafe = true;
+                        strResult = GameModel.currentLocale.Name;
+                    }
+                    else if (parts.Length == 1)
+                    {
+                        Debug.Log("Not able to enter");
+                        strResult = "There's nowhere to enter";
+                    }
+                    
+                    break;
                     case "take":
                     if (parts.Length == 1)
                     {

@@ -5,13 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEditor;
 
 public class TriggerEvent : MonoBehaviour
 {
     public GameObject inputManager;
     public GameObject currentInterObj = null;
-    
     public GameObject playerObj;
+    MenuController menuController;
     public Text storyHead;
     public Text storyNarrative;
     public InteractionObject currentInterObjScript = null;
@@ -20,15 +21,17 @@ public class TriggerEvent : MonoBehaviour
     public Location nextLocale;
     public GameObject parentLocation;
     public Transform[] locations;
-    bool failsafe = false;
+    public bool failsafe = false;
     string locationStr;
-    Collider2D Destination;
+    public Collider2D Destination;
+    
 
     void Start()
     {
         inputManager = GameObject.FindGameObjectWithTag("GameController");
         storyHead.text = GameModel.currentLocale.Name;
         locations = parentLocation.GetComponentsInChildren<Transform>(true);
+        menuController = GameObject.Find("InputManager").GetComponent<MenuController>();
     }
 
     void Update()
@@ -70,24 +73,27 @@ public class TriggerEvent : MonoBehaviour
     void OnTriggerEnter2D(Collider2D encounter)
     {
         ReliableOnTriggerExit.NotifyTriggerEnter(encounter, gameObject, OnTriggerExit2D);
-        if (encounter.name == "Trap")
+        if (encounter.tag == "Trap")
         {
-            Debug.Log("Got go South");
-            nextLocale = GameModel.currentLocale.getLocation("South");
+            Debug.Log("Got go " + encounter.name);
+            nextLocale = GameModel.currentLocale.getLocation(encounter.name);
             if (nextLocale == null)
             {
-                storyHead.text = "Sorry can't go South | " + GameModel.currentLocale.Name;
+                storyHead.text = (GameModel.currentLocale.Name);
+                storyNarrative.text = ($"Sorry can't go {encounter.name}");
             }
             else
             {
                 LoadLocation();
+                
             }
             failsafe = true;
         }
-        else if ((!failsafe) && (encounter.tag == "Entrance"))
+        else if (encounter.tag == "Entrance")
         {
-            Destination = encounter;
-            storyHead.text = "Press E to enter " + GameModel.currentLocale.getLocation(encounter.name).Name;
+            nextLocale = GameModel.currentLocale.getLocation(encounter.name);
+            currentInterObj = encounter.gameObject;
+            storyHead.text = "Type to 'enter' to go to " + GameModel.currentLocale.getLocation(currentInterObj.name).Name;
         }
         else if (encounter.tag == "Respawn")
         {
@@ -114,7 +120,6 @@ public class TriggerEvent : MonoBehaviour
         }
         else if (encounter.tag != "Entrance")
         {
-
             currentInterObj = encounter.gameObject;
             currentInterObjScript = currentInterObj.GetComponent<InteractionObject>();
             storyHead.text = currentInterObj.tag;
@@ -124,6 +129,9 @@ public class TriggerEvent : MonoBehaviour
                 anim = encounter.GetComponent<Animator>();
                 anim.SetBool("Encountered", true);
             }
+            playerObj.GetComponent<PlayerMovement>().horizontalMove = 0f;
+            playerObj.GetComponent<PlayerMovement>().locked = true;
+            playerObj.GetComponent<PlayerMovement>().enabled = false;
             inputManager.GetComponent<MenuController>().openText();
             failsafe = true;
         }
@@ -157,15 +165,19 @@ public class TriggerEvent : MonoBehaviour
         {
             if (locations[i].name == nextLocale.Name)
             {
+                playerObj.GetComponent<Transform>().position = new Vector3(0f, -1.47f, 0);
                 locations[i].gameObject.SetActive(true);
                 GameObject.Find(GameModel.currentLocale.Name).SetActive(false);
                 GameModel.currentLocale = nextLocale;
                 playerObj.transform.position = new Vector3(0f, -1.47f, 0);
                 storyHead.text = nextLocale.Name;
                 storyNarrative.text = nextLocale.Story;
+                menuController.exitText();
                 break;
             }
         }
     }
+
+   
  
 }

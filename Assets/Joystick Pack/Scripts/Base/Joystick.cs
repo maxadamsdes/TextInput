@@ -134,6 +134,12 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         input = Vector2.zero;
         handle.anchoredPosition = Vector2.zero;
     }
+    public virtual void OnPointerUp2()
+    {
+        input = Vector2.zero;
+        handle.anchoredPosition = Vector2.zero;
+    }
+
 
     protected Vector2 ScreenPointToAnchoredPosition(Vector2 screenPosition)
     {

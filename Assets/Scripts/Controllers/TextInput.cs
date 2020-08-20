@@ -10,10 +10,10 @@ public class TextInput : MonoBehaviour {
 	public Text outputStory;
 
 	// Use this for initialization
-	void Start () {
+	void Start()
+	{
 		//output.text = GameModel.currentLocale.Name;
 		//outputStory.text = GameModel.currentLocale.Story;
-
 		input = this.GetComponent<InputField>();
 		se = new InputField.SubmitEvent();
 		se.AddListener(SubmitInput);
@@ -30,7 +30,7 @@ public class TextInput : MonoBehaviour {
          output.text = aCmd.Parse(arg0);
 
 		input.text = "";
-		input.ActivateInputField();
+		//input.ActivateInputField();
 	}
 
 	private void ChangeInput( string arg0)

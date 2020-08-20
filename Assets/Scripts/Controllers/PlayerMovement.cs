@@ -12,16 +12,18 @@ public class PlayerMovement : MonoBehaviour
 	public float runSpeed = 40f; //
 	public float horizontalMove = 0f;
 	public bool lockMove = false;
-	bool jump = false;
+	public bool jump = false;
 	bool crouch = false;
+	public bool locked;
 	public float playerPositionX;
 	public float playerPositionY;
-	private GameObject playerObj = null; //
-	//protected Joystick joystick;
-	//protected Joy joybutton;
+	private GameObject playerObj = null;
+	public bool joystickDown;
+	protected Joystick joystick;
 
 	void Start()
     {
+		joystick = FindObjectOfType<Joystick>();
 		animator = GetComponent<Animator>();
 		if (playerObj == null)
 		{
@@ -32,22 +34,44 @@ public class PlayerMovement : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		
 		//var rigidbody2D = GetComponent<Rigidbody2D>();
 		//rigidbody2D.velocity = new Vector3(joystick.Horizontal * 30f,
 		//									rigidbody2D.velocity.y,
 		//									joystick.Vertical * 30f);
 		
-
+		
 		float h = Input.GetAxis("Horizontal");
 		float v = Input.GetAxis("Vertical");
 		bool fire = Input.GetButtonDown("Fire1");
-		if (h != 0)
+
+        //if (joystickDown == true)
+        //{
+		if (!locked)
         {
-			animator.SetBool("horizontalMovement", true);
+			horizontalMove = joystick.Horizontal * runSpeed;
 		}
         else
         {
+			horizontalMove = 0f;
+		}
+            
+			
+        //}
+        //else
+        //{
+            //horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+        //}
+        playerPositionX = playerObj.transform.position.x;
+		playerPositionY = playerObj.transform.position.y;
+		if (horizontalMove != 0)
+		{
+			animator.SetBool("horizontalMovement", true);
+		}
+		else
+		{
 			animator.SetBool("horizontalMovement", false);
+			joystickDown = false;
 		}
 		if (v > 0.2)
 		{
@@ -58,10 +82,7 @@ public class PlayerMovement : MonoBehaviour
 			animator.SetBool("verticalMovement", false);
 		}
 
-		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
-		playerPositionX = playerObj.transform.position.x;
-		playerPositionY = playerObj.transform.position.y;
-	
+
 		if (Input.GetButtonDown("Jump"))
 		{
 			jump = true;
@@ -75,17 +96,26 @@ public class PlayerMovement : MonoBehaviour
 		{
 			crouch = false;
 		}
-
-		//if (Input.GetButtonDown("Cancel"))
-  //      {
-		//	SceneManager.LoadScene("Story");
-  //      }
 	}
 
 	void FixedUpdate()
 	{
 		// Move our character
-		controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+		if (!locked)
+        {
+			controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+		}
 		jump = false;
 	}
+
+
+	public void Jump()
+    {
+		jump = true;
+    }
+
+	public void JoystickPressed()
+    {
+		joystickDown = true;
+    }
 }
