@@ -41,9 +41,10 @@ public static class GameModel
     }
 
     public static Location currentLocale;
-    public static Player currentPlayer;
+    public static GameObject currentPlayer = GameObject.Find("Player");
     public static Event currentEvent;
-
+    public static GameObject[] inventory = new GameObject[10];
+    
     public static void MakeGame()
     {
         Location forest, cave, cave2, beach, river, highway, ocean;
@@ -91,6 +92,6 @@ public static class GameModel
         highway.addLocation("East", forest);
     }
 
-
+    //public static void 
 }
 

@@ -10,13 +10,16 @@ public class Player : MonoBehaviour
     private string locationName;
     private int health;
     private int wealth;
+    private Inventory inventory;
     // what about inventory?
 
     public string Name { get => name; set => name = value; }
     public Location Location { get => location; set => location = value; }
+
     public string LocationName { get => locationName; set => locationName = value; }
     public int Health { get => health; set => health = value; }
     public int Wealth { get => wealth; set => wealth = value; }
+    public Inventory Inventory { get => inventory; set => inventory = value; }
 
     public void SavePlayer()
     {

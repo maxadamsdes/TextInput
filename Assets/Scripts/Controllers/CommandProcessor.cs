@@ -147,7 +147,7 @@ public class CommandProcessor
                     }// end switch
                     break;
 
-                case "help":
+                case "test":
                     try
                     {
                         Debug.Log(triggered.currentInterObj.name);

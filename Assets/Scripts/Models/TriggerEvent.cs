@@ -30,7 +30,7 @@ public class TriggerEvent : MonoBehaviour
     {
         inputManager = GameObject.FindGameObjectWithTag("GameController");
         storyHead.text = GameModel.currentLocale.Name;
-        locations = parentLocation.GetComponentsInChildren<Transform>(true);
+        parentLocation.GetComponentsInChildren<Transform>(true);
         menuController = GameObject.Find("InputManager").GetComponent<MenuController>();
     }
 
