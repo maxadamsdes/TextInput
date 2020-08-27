@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
 	public bool locked;
 	public float playerPositionX;
 	public float playerPositionY;
-	private GameObject playerObj = null;
+	private GameObject playerObj = GameModel.currentPlayer;
 	public bool joystickDown;
 	protected Joystick joystick;
 

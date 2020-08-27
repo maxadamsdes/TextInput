@@ -1,13 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-
-using System.IO;
-
-
-
-using System.Text;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 // Is this a factory?
 
@@ -41,10 +35,23 @@ public static class GameModel
     }
 
     public static Location currentLocale;
-    public static GameObject currentPlayer = GameObject.Find("Player");
+    public static Location nextLocale;
+    public static GameObject currentPlayer;
     public static Event currentEvent;
     public static GameObject[] inventory = new GameObject[10];
-    
+    public static bool itemAdded = false;
+    private static GameObject invItemImage;
+    private static GameObject invItemName;
+    public static Vector3 playerPosition;
+    public static Text storyHead;
+    public static Text storyNarrative;
+    static MenuController menuController;
+
+    public static void Awake()
+    {
+        GameObject currentPlayer = GameObject.Find("Player");
+        menuController = GameObject.Find("InputManager").GetComponent<MenuController>();
+    }
     public static void MakeGame()
     {
         Location forest, cave, cave2, beach, river, highway, ocean;
@@ -53,8 +60,6 @@ public static class GameModel
             Name = "Forest",
             Story = " Run!!"
         };
-
-
 
         // forest
         forest = currentLocale;
@@ -91,6 +96,68 @@ public static class GameModel
         highway = forest.getLocation("West");
         highway.addLocation("East", forest);
     }
+
+
+    public static void AddItem(GameObject item)
+    {
+        // Find first open slot in inventory
+        for (int i = 0; i < GameModel.inventory.Length; i++)
+        {
+            if (GameModel.inventory[i] == null)
+            {
+                GameModel.inventory[i] = item;
+                Debug.Log(item.name + " was added!");
+
+                itemAdded = true;
+                break;
+            }
+
+            // If inventory was full
+            if (!itemAdded)
+            {
+                Debug.Log("Inventory Full - Item not Added");
+            }
+
+        }
+    }
+
+    public static void LoadInventoryItems()
+    {
+        for (int i = 0; i < GameModel.inventory.Length; i++)
+        {
+            if (GameModel.inventory[i] != null)
+            {
+                invItemImage = GameObject.Find("ItemImage" + (Convert.ToString(i + 1)));
+                //invItemImage.GetComponent<Image>().sprite = GameModel.inventory[0].GetComponent<Image>().sprite;
+                invItemImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("Assets/Sprites/Items/" + inventory[i].name);
+                invItemName = GameObject.Find("ItemText" + (Convert.ToString(i + 1)));
+                invItemName.GetComponent<Text>().text = GameModel.inventory[i].name;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+
+
+
+
+    public static void LoadGame()
+    {
+        GameObject.Find(GameModel.currentLocale.Name).SetActive(false);
+        if (nextLocale != null)
+        {
+            GameModel.currentLocale = GameModel.nextLocale;
+        }
+        //currentPlayer.transform.position = new Vector3(0f, -1.47f, 0);
+        storyHead.text = GameModel.currentLocale.Name;
+        storyNarrative.text = GameModel.currentLocale.Story;
+        menuController.exitText();
+    }
+
+
 
     //public static void 
 }
