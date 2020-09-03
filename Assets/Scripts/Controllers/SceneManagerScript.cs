@@ -29,7 +29,7 @@ public class SceneManagerScript : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
         GameObject Player = GameObject.Find("Player");
-        Player.GetComponent<Transform>().position.x = GameModel.playerPositionx;
+        //Player.GetComponent<Transform>().position.x = GameModel.playerPositionx;
     }
 
     //public void LoadStory()
