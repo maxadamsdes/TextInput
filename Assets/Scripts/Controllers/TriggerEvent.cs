@@ -143,6 +143,7 @@ public class TriggerEvent : MonoBehaviour
             storyHead.text = GameModel.currentLocale.Name;
             storyNarrative.text = "";
         }
+        currentInterObj = null;
         failsafe = false;
         
     }

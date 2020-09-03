@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\Controllers\FixedButton.cs" />
     <Compile Include="Assets\Scripts\Controllers\FixedTouchField.cs" />
     <Compile Include="Assets\Scripts\Controllers\InteractionObject.cs" />
+    <Compile Include="Assets\Scripts\Controllers\LoadInv.cs" />
     <Compile Include="Assets\Scripts\Controllers\MenuController.cs" />
     <Compile Include="Assets\Scripts\Controllers\ParallaxBackground.cs" />
     <Compile Include="Assets\Scripts\Controllers\PlayerMovement.cs" />

@@ -8,9 +8,27 @@ using UnityEngine.EventSystems;
 public static class GameModel
 {
 
-	static String _name;
+    public static Location currentLocale;
+    public static Location nextLocale;
+    public static GameObject currentPlayer;
+    public static Event currentEvent;
+    public static GameObject[] inventory = new GameObject[10];
+    public static GameObject[] itemList;
+    public static bool itemAdded = false;
+    private static GameObject invItemImage;
+    private static GameObject invItemName;
+    public static Vector3 playerPosition;
+    public static Text storyHead;
+    public static Text storyNarrative;
+    static MenuController menuController;
+    public static int Test = 0;
+    public static Vector3 playerPositionx;
+    public static Vector3 playerPositiony;
+    public static Vector3 playerPositionz;
 
-	public static string Name{
+    static String _name;
+	public static string Name
+    {
 		get 
 		{ 
 			return _name;  
@@ -34,24 +52,6 @@ public static class GameModel
         }
     }
 
-    public static Location currentLocale;
-    public static Location nextLocale;
-    public static GameObject currentPlayer;
-    public static Event currentEvent;
-    public static GameObject[] inventory = new GameObject[10];
-    public static bool itemAdded = false;
-    private static GameObject invItemImage;
-    private static GameObject invItemName;
-    public static Vector3 playerPosition;
-    public static Text storyHead;
-    public static Text storyNarrative;
-    static MenuController menuController;
-
-    public static void Awake()
-    {
-        GameObject currentPlayer = GameObject.Find("Player");
-        menuController = GameObject.Find("InputManager").GetComponent<MenuController>();
-    }
     public static void MakeGame()
     {
         Location forest, cave, cave2, beach, river, highway, ocean;
@@ -97,15 +97,14 @@ public static class GameModel
         highway.addLocation("East", forest);
     }
 
-
     public static void AddItem(GameObject item)
     {
         // Find first open slot in inventory
-        for (int i = 0; i < GameModel.inventory.Length; i++)
+        for (int i = 0; i < inventory.Length; i++)
         {
-            if (GameModel.inventory[i] == null)
+            if (inventory[i] == null)
             {
-                GameModel.inventory[i] = item;
+                inventory[i] = item;
                 Debug.Log(item.name + " was added!");
 
                 itemAdded = true;
@@ -123,42 +122,36 @@ public static class GameModel
 
     public static void LoadInventoryItems()
     {
-        for (int i = 0; i < GameModel.inventory.Length; i++)
+        for (int i = 0; i < 10; i++)
         {
-            if (GameModel.inventory[i] != null)
+            string invName = inventory[i].name;
+            if (inventory[i] != null)
             {
                 invItemImage = GameObject.Find("ItemImage" + (Convert.ToString(i + 1)));
                 //invItemImage.GetComponent<Image>().sprite = GameModel.inventory[0].GetComponent<Image>().sprite;
-                invItemImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("Assets/Sprites/Items/" + inventory[i].name);
-                invItemName = GameObject.Find("ItemText" + (Convert.ToString(i + 1)));
-                invItemName.GetComponent<Text>().text = GameModel.inventory[i].name;
+                //invItemImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("Assets/Sprites/Items/" + inventory[i].name);
+                //invItemName = GameObject.Find("ItemText" + (Convert.ToString(i + 1)));
+                GameObject.Find("ItemText1").GetComponent<Text>().text = "test";
+                //invItemName.GetComponent<Text>().text = GameModel.inventory[i].name;
             }
             else
             {
-                break;
+                //break;
             }
         }
     }
 
-
-
-
-
     public static void LoadGame()
     {
-        GameObject.Find(GameModel.currentLocale.Name).SetActive(false);
+        GameObject.Find(currentLocale.Name).SetActive(false);
         if (nextLocale != null)
         {
-            GameModel.currentLocale = GameModel.nextLocale;
+            currentLocale = nextLocale;
         }
         //currentPlayer.transform.position = new Vector3(0f, -1.47f, 0);
-        storyHead.text = GameModel.currentLocale.Name;
-        storyNarrative.text = GameModel.currentLocale.Story;
+        storyHead.text = currentLocale.Name;
+        storyNarrative.text = currentLocale.Story;
         menuController.exitText();
     }
-
-
-
-    //public static void 
 }
 

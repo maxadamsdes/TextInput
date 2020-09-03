@@ -17,12 +17,15 @@ public class PlayerMovement : MonoBehaviour
 	public bool locked;
 	public float playerPositionX;
 	public float playerPositionY;
-	private GameObject playerObj = GameModel.currentPlayer;
+	private GameObject playerObj;
 	public bool joystickDown;
 	protected Joystick joystick;
+	public GameObject[] inventory = GameModel.inventory;
+	public GameObject[] itemsList = GameModel.itemList;
 
 	void Start()
     {
+		playerObj = GameModel.currentPlayer;
 		joystick = FindObjectOfType<Joystick>();
 		animator = GetComponent<Animator>();
 		if (playerObj == null)

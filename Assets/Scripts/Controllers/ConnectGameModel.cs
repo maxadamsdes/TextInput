@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class ConnectGameModel : MonoBehaviour
 {
-    
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        GameModel.Name = "The Game Name";
-        GameModel.MakeGame();
-    }
+        if (GameModel.Name != "Vexed Text")
+        {
+            GameModel.Name = "Vexed Text";
+            GameModel.MakeGame();
+            GameModel.itemList = Resources.LoadAll<GameObject>("file:../Assets/Prefabs/Items");
+        }
+    } 
 
 }
