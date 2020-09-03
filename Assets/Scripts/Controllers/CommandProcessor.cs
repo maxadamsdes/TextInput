@@ -36,8 +36,8 @@ public class CommandProcessor
                             if (triggered.currentInterObj.tag == "Item")
                             {
 
-                                triggered.inventory.AddItem(triggered.currentInterObj);
-                                if (triggered.inventory.itemAdded != true)
+                                GameModel.AddItem(triggered.currentInterObj);
+                                if (GameModel.itemAdded != true)
                                 {
                                     Debug.Log("Not enough space!");
                                     strResult = "You dont have enough space for " + triggered.currentInterObj.name + "!";
@@ -79,23 +79,20 @@ public class CommandProcessor
                     {
                         case "north":
                             Debug.Log("Got go North");
-                            triggered.nextLocale = GameModel.currentLocale.getLocation("North");
-                            if (triggered.nextLocale == null)
+                            GameModel.nextLocale = GameModel.currentLocale.getLocation("North");
+                            if (GameModel.nextLocale == null)
                                 strResult = "Sorry can't go North | " + GameModel.currentLocale.Name;
                             else
                             {
                                 triggered.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
-                                //GameModel.currentLocale = nextLocale;
-                                //strResult = GameModel.currentLocale.Name;
-                                //storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
                             }
 
                             break;
                         case "south":
                             Debug.Log("Got go South");
-                            triggered.nextLocale = GameModel.currentLocale.getLocation("South");
-                            if (triggered.nextLocale == null)
+                            GameModel.nextLocale = GameModel.currentLocale.getLocation("South");
+                            if (GameModel.nextLocale == null)
                             {
                                 strResult = "Sorry can't go South | " + GameModel.currentLocale.Name;
                             }
@@ -103,15 +100,12 @@ public class CommandProcessor
                             {
                                 triggered.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
-                                //GameModel.currentLocale = nextLocale;
-                                //strResult = GameModel.currentLocale.Name;
-                                //storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
                             }
                             break;
                         case "east":
                             Debug.Log("Got go East");
-                            triggered.nextLocale = GameModel.currentLocale.getLocation("East");
-                            if (triggered.nextLocale == null)
+                            GameModel.nextLocale = GameModel.currentLocale.getLocation("East");
+                            if (GameModel.nextLocale == null)
                             {
                                 strResult = "Sorry can't go East | " + GameModel.currentLocale.Name;
                             }
@@ -119,15 +113,12 @@ public class CommandProcessor
                             {
                                 triggered.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
-                                //GameModel.currentLocale = nextLocale;
-                                //strResult = GameModel.currentLocale.Name;
-                                //storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
                             }
                             break;
                         case "west":
                             Debug.Log("Got go West");
-                            triggered.nextLocale = GameModel.currentLocale.getLocation("West");
-                            if (triggered.nextLocale == null)
+                            GameModel.nextLocale = GameModel.currentLocale.getLocation("West");
+                            if (GameModel.nextLocale == null)
                             {
                                 strResult = "Sorry can't go West | " + GameModel.currentLocale.Name;
                             }
@@ -135,9 +126,6 @@ public class CommandProcessor
                             {
                                 triggered.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
-                                //GameModel.currentLocale = nextLocale;
-                                //strResult = GameModel.currentLocale.Name;
-                                //storyNarrative.GetComponent<Text>().text = GameModel.currentLocale.Story;
                             }
                             break;
                         default:
@@ -161,11 +149,11 @@ public class CommandProcessor
                 case "enter":
                     if ((parts.Length == 1) && (triggered.currentInterObj.tag == "Entrance"))
                     {
-                        var nextLocale = GameModel.currentLocale.getLocation(triggered.currentInterObj.name);
-                        Debug.Log("Got go " + nextLocale);
-                        if (nextLocale == null)
+                        GameModel.nextLocale = GameModel.currentLocale.getLocation(triggered.currentInterObj.name);
+                        Debug.Log("Got go " + triggered.currentInterObj.name);
+                        if (GameModel.nextLocale == null)
                         {
-                            triggered.storyHead.text = "Sorry can't go to " + nextLocale + " | " + GameModel.currentLocale.Name;
+                            triggered.storyHead.text = "Sorry can't go to " + GameModel.nextLocale + " | " + GameModel.currentLocale.Name;
                         }
                         else
                         {
@@ -193,8 +181,8 @@ public class CommandProcessor
                                 var randomint = rand.Next(itemOptions.Length);
                                 var randomItem = GameObject.Find(itemOptions[randomint]);
                                 var randomItemText = GameObject.Find(itemOptions[randomint]).GetComponent<Text>().text;
-                                triggered.inventory.AddItem(randomItem);
-                                if (triggered.inventory.itemAdded != true)
+                                GameModel.AddItem(randomItem);
+                                if (GameModel.itemAdded != true)
                                 {
                                     Debug.Log("Not enough space!");
                                     strResult = "You dont have enough space for " + randomItemText + "!";
@@ -233,8 +221,8 @@ public class CommandProcessor
                                     {
                                         try
                                         {
-                                            triggered.inventory.AddItem(GameObject.Find("Sword"));
-                                            if (triggered.inventory.itemAdded != true)
+                                            GameModel.AddItem(GameObject.Find("Sword"));
+                                            if (GameModel.itemAdded != true)
                                             {
                                                 Debug.Log("Not enough space!");
                                                 strResult = "You dont have enough space for the Sword!";
@@ -252,6 +240,7 @@ public class CommandProcessor
                                         {
                                             Debug.Log("Can't do that");
                                             strResult = "You've already chosen!";
+                                            
                                         }
 
                                     }
@@ -277,8 +266,8 @@ public class CommandProcessor
                                     {
                                         try
                                         {
-                                            triggered.inventory.AddItem(GameObject.Find("Gold"));
-                                            if (triggered.inventory.itemAdded != true)
+                                            GameModel.AddItem(GameObject.Find("Gold"));
+                                            if (GameModel.itemAdded != true)
                                             {
                                                 Debug.Log("Not enough space!");
                                                 strResult = "You dont have enough space for the Gold!";
@@ -332,8 +321,8 @@ public class CommandProcessor
                                 var randomBool = rand.Next(2) == 1;
                                 if (!randomBool)
                                 {
-                                    triggered.inventory.AddItem(GameObject.Find("Sword"));
-                                    if (triggered.inventory.itemAdded != true)
+                                    GameModel.AddItem(GameObject.Find("Sword"));
+                                    if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");
                                         strResult = "You dont have enough space for the Sword!";
@@ -343,8 +332,8 @@ public class CommandProcessor
                                         GameObject.Find("Sword").SetActive(false);
                                     }
 
-                                    triggered.inventory.AddItem(GameObject.Find("Gold"));
-                                    if (triggered.inventory.itemAdded != true)
+                                    GameModel.AddItem(GameObject.Find("Gold"));
+                                    if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");
                                         strResult = "You dont have enough space for the Gold!";
