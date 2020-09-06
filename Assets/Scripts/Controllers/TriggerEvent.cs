@@ -1,23 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using System;
-using UnityEditor;
 
 public class TriggerEvent : MonoBehaviour
 {
     public GameObject inputManager;
-    public GameObject currentInterObj = null;
     public GameObject playerObj;
     public Text storyHead;
     public Text storyNarrative;
     public InteractionObject currentInterObjScript = null;
     public Animator anim;
-    public GameObject parentLocation;
-    public Transform[] locations;
+    
+    
     public bool failsafe = false;
     string locationStr;
     public Collider2D Destination;
@@ -27,10 +20,6 @@ public class TriggerEvent : MonoBehaviour
     {
         inputManager = GameObject.FindGameObjectWithTag("GameController");
         storyHead.text = GameModel.currentLocale.Name;
-        parentLocation.GetComponentsInChildren<Transform>(true);
-        parentLocation = GameObject.Find("Locations");
-        locations = parentLocation.GetComponentsInChildren<Transform>(true);
-        
     }
 
     void Update()
@@ -47,7 +36,7 @@ public class TriggerEvent : MonoBehaviour
                 }
                 else
                 {
-                    LoadLocation();
+                    GameModel.loadLevel.LoadLocation();
                 }
                 failsafe = true;
 
@@ -72,7 +61,7 @@ public class TriggerEvent : MonoBehaviour
             }
             else
             {
-                LoadLocation();
+                GameModel.loadLevel.LoadLocation();
                 
             }
             failsafe = true;
@@ -80,8 +69,9 @@ public class TriggerEvent : MonoBehaviour
         else if (encounter.tag == "Entrance")
         {
             GameModel.nextLocale = GameModel.currentLocale.getLocation(encounter.name);
-            currentInterObj = encounter.gameObject;
-            storyHead.text = "Type to 'enter' to go to " + GameModel.currentLocale.getLocation(currentInterObj.name).Name;
+            GameModel.currentIntObj = encounter.gameObject;
+            GameModel.nextLocation = encounter.name;
+            storyHead.text = "Type to 'enter' to go to " + GameModel.currentLocale.getLocation(GameModel.currentIntObj.name).Name;
         }
         else if (encounter.tag == "Respawn")
         {
@@ -102,24 +92,41 @@ public class TriggerEvent : MonoBehaviour
         }
         else if (encounter.tag == "Sign")
         {
-            currentInterObj = encounter.gameObject;
-            storyHead.text = currentInterObj.tag;
-            storyNarrative.text = currentInterObj.GetComponent<Text>().text;
+            GameModel.currentIntObj = encounter.gameObject;
+            storyHead.text = GameModel.currentIntObj.tag;
+            storyNarrative.text = GameModel.currentIntObj.GetComponent<Text>().text;
         }
         else if (encounter.tag != "Entrance")
         {
-            currentInterObj = encounter.gameObject;
-            currentInterObjScript = currentInterObj.GetComponent<InteractionObject>();
-            storyHead.text = currentInterObj.tag;
-            storyNarrative.text = currentInterObj.GetComponent<Text>().text;
             if (encounter.name == "Chest")
             {
                 anim = encounter.GetComponent<Animator>();
                 anim.SetBool("Encountered", true);
+                GameModel.pickUpAble = false;
+
             }
+            else
+            {
+                GameModel.pickUpAble = true;
+            }
+            GameModel.currentIntObj = encounter.gameObject;
+            storyHead.text = GameModel.currentIntObj.tag;
+            storyNarrative.text = GameModel.currentIntObj.GetComponent<Text>().text;
             playerObj.GetComponent<PlayerMovement>().horizontalMove = 0f;
             playerObj.GetComponent<PlayerMovement>().locked = true;
             playerObj.GetComponent<PlayerMovement>().enabled = false;
+            if (encounter.name == "Coin")
+            {
+                GameModel.itemToAdd = 0;
+            }
+            else if (encounter.name == "Rune")
+            {
+                GameModel.itemToAdd = 1;
+            }
+            else if (encounter.name == "Key")
+            {
+                GameModel.itemToAdd = 2;
+            }
             inputManager.GetComponent<MenuController>().openText();
             failsafe = true;
         }
@@ -141,27 +148,12 @@ public class TriggerEvent : MonoBehaviour
         else
         {
             storyHead.text = GameModel.currentLocale.Name;
-            storyNarrative.text = "";
+            storyNarrative.text = GameModel.currentLocale.Story;
         }
-        currentInterObj = null;
+        GameModel.pickUpAble = false;
+        GameModel.currentIntObj = null;
         failsafe = false;
         
     }
 
-    public void LoadLocation()
-    {
-        for (int i = 0; i < locations.Length; i++)
-        {
-            if (locations[i].name == GameModel.nextLocale.Name)
-            {
-                //playerObj.GetComponent<Transform>().position = new Vector3(0f, -1.47f, 0);
-                locations[i].gameObject.SetActive(true);
-                GameModel.LoadGame();
-                break;
-            }
-        }
-    }
-
-   
- 
 }

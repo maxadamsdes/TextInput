@@ -6,20 +6,52 @@ public class Location
 {
     private string name;
     private string story;
-
-    // what about location assests??
+    
+    public string Name { get => name; set => name = value; }
+    public string Story { get => story; set => story = value; }
+    
+    public Vector3 NEntry { get => nEntry; set => nEntry = value; }
+    private Vector3 sEntry;
+    public Vector3 SEntry { get => sEntry; set => sEntry = value; }
+    private Vector3 eEntry;
+    public Vector3 EEntry { get => eEntry; set => eEntry = value; }
+    private Vector3 nEntry;
+    private Vector3 wEntry;
+    public Vector3 WEntry { get => wEntry; set => wEntry = value; }
+    // what about location assets??
+    private Dictionary<string, Vector3> items = new Dictionary<string, Vector3>();
+    public Dictionary<string, Vector3> Items { get => items; set => items = value; }
+    
 
     private Dictionary<string, Location> Locations = new Dictionary<string, Location>();
 
-    public string Name { get => name; set => name = value; }
-    public string Story { get => story; set => story = value; }
+    public void AddItem(string pName, Vector3 pPosition)
+    {
+        Items.Add(pName, pPosition);
+    }
 
-    public void addLocation(string pDirection ,string pName, string pStory)
+    public void RemoveItem(string pName)
+    {
+        Items.Remove(pName);
+    }
+
+    public Vector3 GetItem(string pName)
+    {
+        return Items[pName];
+    }
+
+    
+
+    public void addLocation(string pDirection ,string pName, string pStory, Vector3 pNEntry, Vector3 pSEntry, Vector3 pEEntry, Vector3 pWEntry)
     {
         Location newLocation = new Location
         {
             Name = pName,
-            Story = pStory
+            Story = pStory,
+            NEntry = pNEntry,
+            SEntry = pSEntry,
+            EEntry = pEEntry,
+            WEntry = pWEntry
         };
 
         Locations.Add(pDirection, newLocation);

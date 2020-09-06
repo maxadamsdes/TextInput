@@ -9,9 +9,9 @@ public class CommandProcessor
     public CommandProcessor ()
 		{
 		}
-        
-        
-		public String Parse(String pCmdStr){
+    
+
+    public String Parse(String pCmdStr){
         TriggerEvent triggered;
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         GameObject storyNarrative = GameObject.FindGameObjectWithTag("Story");
@@ -33,22 +33,24 @@ public class CommandProcessor
 
                         try
                         {
-                            if (triggered.currentInterObj.tag == "Item")
+                            if ((GameModel.currentIntObj.tag == "Item") && (GameModel.pickUpAble == true))
                             {
 
-                                GameModel.AddItem(triggered.currentInterObj);
+                                GameModel.AddItem();
                                 if (GameModel.itemAdded != true)
                                 {
                                     Debug.Log("Not enough space!");
-                                    strResult = "You dont have enough space for " + triggered.currentInterObj.name + "!";
+                                    strResult = "You dont have enough space for " + GameModel.currentIntObj.name + "!";
                                 }
                                 else
                                 {
-                                    Debug.Log(triggered.currentInterObj.name + " added to Inventory");
-                                    strResult = triggered.currentInterObj.name + " added to Inventory";
+                                    Debug.Log(GameModel.currentIntObj.name + " added to Inventory");
+                                    strResult = GameModel.currentIntObj.name + " added to Inventory";
                                     storyNarrative.GetComponent<Text>().text = "Sweet as";
-                                    triggered.currentInterObj.SetActive(false);
-                                    triggered.currentInterObj = null;
+                                    GameModel.DestroyGameObject(GameModel.currentIntObj);
+                                    GameModel.currentLocale.RemoveItem(GameModel.currentIntObj.name);
+                                    GameModel.currentIntObj.SetActive(false);
+                                    GameModel.currentIntObj = null;
                                 }
 
                             }
@@ -84,7 +86,8 @@ public class CommandProcessor
                                 strResult = "Sorry can't go North | " + GameModel.currentLocale.Name;
                             else
                             {
-                                triggered.LoadLocation();
+                                GameModel.nextLocation = "North";
+                                GameModel.loadLevel.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
                             }
 
@@ -98,7 +101,8 @@ public class CommandProcessor
                             }
                             else
                             {
-                                triggered.LoadLocation();
+                                GameModel.nextLocation = "South";
+                                GameModel.loadLevel.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
                             }
                             break;
@@ -111,7 +115,8 @@ public class CommandProcessor
                             }
                             else
                             {
-                                triggered.LoadLocation();
+                                GameModel.nextLocation = "East";
+                                GameModel.loadLevel.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
                             }
                             break;
@@ -124,7 +129,8 @@ public class CommandProcessor
                             }
                             else
                             {
-                                triggered.LoadLocation();
+                                GameModel.nextLocation = "West";
+                                GameModel.loadLevel.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
                             }
                             break;
@@ -138,7 +144,7 @@ public class CommandProcessor
                 case "test":
                     try
                     {
-                        Debug.Log(triggered.currentInterObj.name);
+                        Debug.Log(GameModel.currentIntObj.name);
                     }
                     catch
                     {
@@ -147,17 +153,17 @@ public class CommandProcessor
                     break;
 
                 case "enter":
-                    if ((parts.Length == 1) && (triggered.currentInterObj.tag == "Entrance"))
+                    if ((parts.Length == 1) && (GameModel.currentIntObj.tag == "Entrance"))
                     {
-                        GameModel.nextLocale = GameModel.currentLocale.getLocation(triggered.currentInterObj.name);
-                        Debug.Log("Got go " + triggered.currentInterObj.name);
+                        GameModel.nextLocale = GameModel.currentLocale.getLocation(GameModel.currentIntObj.name);
+                        Debug.Log("Got go " + GameModel.currentIntObj.name);
                         if (GameModel.nextLocale == null)
                         {
                             triggered.storyHead.text = "Sorry can't go to " + GameModel.nextLocale + " | " + GameModel.currentLocale.Name;
                         }
                         else
                         {
-                            triggered.LoadLocation();
+                            GameModel.loadLevel.LoadLocation();
                         }
                         triggered.failsafe = true;
                         strResult = GameModel.currentLocale.Name;
@@ -174,27 +180,28 @@ public class CommandProcessor
                     {
                         try
                         {
-                            if (triggered.currentInterObj.name == "Chest")
+                            if (GameModel.currentIntObj.name == "Chest")
                             {
-                                string[] itemOptions = { "CoinStatic", "KeyStatic", "RuneStatic" };
+                                //string[] itemOptions = { "CoinStatic", "KeyStatic", "RuneStatic" };
                                 var rand = new System.Random();
-                                var randomint = rand.Next(itemOptions.Length);
-                                var randomItem = GameObject.Find(itemOptions[randomint]);
-                                var randomItemText = GameObject.Find(itemOptions[randomint]).GetComponent<Text>().text;
-                                GameModel.AddItem(randomItem);
+                                var randomint = rand.Next(GameModel.items.Count);
+                                var randomItem = GameModel.items[randomint];
+                                GameModel.itemToAdd = randomint;
+                                GameModel.AddItem();
                                 if (GameModel.itemAdded != true)
                                 {
                                     Debug.Log("Not enough space!");
-                                    strResult = "You dont have enough space for " + randomItemText + "!";
+                                    strResult = "You dont have enough space for " + randomItem.Name + "!";
                                 }
                                 else
                                 {
-                                    Debug.Log(randomItemText + " added to Inventory");
-                                    strResult = (randomItemText + " added to Inventory");
-                                    storyNarrative.GetComponent<Text>().text = "Nice!";
+                                    Debug.Log(randomItem.Name + " added to Inventory");
+                                    strResult = (randomItem.Name + " added to Inventory");
+                                    storyNarrative.GetComponent<Text>().text = "Nice find!";
                                     anim.SetBool("Looted", true);
-                                    triggered.currentInterObj.GetComponent<Collider2D>().enabled = false;
-                                    triggered.currentInterObj = null;
+                                    GameModel.currentLocale.RemoveItem(GameModel.currentIntObj.name);
+                                    GameModel.currentIntObj.GetComponent<Collider2D>().enabled = false;
+                                    GameModel.currentIntObj = null;
                                 }
                             }
                             else
@@ -217,11 +224,12 @@ public class CommandProcessor
                             case "sword":
                                 try
                                 {
-                                    if (triggered.currentInterObj.name == "Owlett_Monster")
+                                    if (GameModel.currentIntObj.name == "Owlett_Monster")
                                     {
                                         try
                                         {
-                                            GameModel.AddItem(GameObject.Find("Sword"));
+                                            GameModel.itemToAdd = 4;
+                                            GameModel.AddItem();
                                             if (GameModel.itemAdded != true)
                                             {
                                                 Debug.Log("Not enough space!");
@@ -232,6 +240,8 @@ public class CommandProcessor
                                                 Debug.Log("Got take Sword");
                                                 strResult = "Taken the sword!";
                                                 storyNarrative.GetComponent<Text>().text = "All power to you";
+                                                GameModel.currentLocale.RemoveItem("Sword");
+                                                GameModel.currentLocale.RemoveItem("Gold");
                                                 GameObject.Find("Sword").SetActive(false);
                                                 GameObject.Find("Gold").SetActive(false);
                                             }
@@ -262,11 +272,12 @@ public class CommandProcessor
                                 try
                                 {
 
-                                    if (triggered.currentInterObj.name == "Owlett_Monster")
+                                    if (GameModel.currentIntObj.name == "Owlett_Monster")
                                     {
                                         try
                                         {
-                                            GameModel.AddItem(GameObject.Find("Gold"));
+                                            GameModel.itemToAdd = 1;
+                                            GameModel.AddItem();
                                             if (GameModel.itemAdded != true)
                                             {
                                                 Debug.Log("Not enough space!");
@@ -277,6 +288,8 @@ public class CommandProcessor
                                                 Debug.Log("Got take Gold");
                                                 strResult = "Taken the Gold!";
                                                 storyNarrative.GetComponent<Text>().text = "A wise choice.";
+                                                GameModel.currentLocale.RemoveItem("Sword");
+                                                GameModel.currentLocale.RemoveItem("Gold");
                                                 GameObject.Find("Sword").SetActive(false);
                                                 GameObject.Find("Gold").SetActive(false);
                                             }
@@ -313,7 +326,7 @@ public class CommandProcessor
                 case "steal":
                     try
                     {
-                        if ((triggered.currentInterObj.name == "Owlett_Monster") && (GameObject.Find("Sword").activeSelf) || (GameObject.Find("Gold").activeSelf))
+                        if ((GameModel.currentIntObj.name == "Owlett_Monster") && (GameObject.Find("Sword").activeSelf) || (GameObject.Find("Gold").activeSelf))
                         {
                             try
                             {
@@ -321,7 +334,8 @@ public class CommandProcessor
                                 var randomBool = rand.Next(2) == 1;
                                 if (!randomBool)
                                 {
-                                    GameModel.AddItem(GameObject.Find("Sword"));
+                                    GameModel.itemToAdd = 3;
+                                    GameModel.AddItem();
                                     if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");
@@ -329,10 +343,12 @@ public class CommandProcessor
                                     }
                                     else
                                     {
+                                        GameModel.currentLocale.RemoveItem("Sword");
                                         GameObject.Find("Sword").SetActive(false);
                                     }
 
-                                    GameModel.AddItem(GameObject.Find("Gold"));
+                                    GameModel.itemToAdd = 0;
+                                    GameModel.AddItem();
                                     if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");
@@ -340,14 +356,15 @@ public class CommandProcessor
                                     }
                                     else
                                     {
+                                        GameModel.currentLocale.RemoveItem("Gold");
                                         GameObject.Find("Gold").SetActive(false);
                                     }
 
                                     Debug.Log("Got steal");
                                     strResult = "Stolen both items!";
                                     storyNarrative.GetComponent<Text>().text = "!!!";
-                                    triggered.currentInterObj.SetActive(false);
-                                    triggered.currentInterObj = null;
+                                    GameModel.currentIntObj.SetActive(false);
+                                    GameModel.currentIntObj = null;
                                     if (parts.Length == 3)
                                     {
                                         String param = parts[2];
@@ -358,9 +375,12 @@ public class CommandProcessor
                                     Debug.Log("Failed steal");
                                     strResult = "You were caught!";
                                     storyNarrative.GetComponent<Text>().text = "Naughty, naughty... Bye!";
-                                    triggered.currentInterObj.GetComponent<Text>().Equals("");
-                                    triggered.currentInterObj.SetActive(false);
-                                    triggered.currentInterObj = null;
+                                    GameModel.currentIntObj.GetComponent<Text>().Equals("");
+                                    GameModel.currentLocale.RemoveItem("Sword");
+                                    GameModel.currentLocale.RemoveItem("Gold");
+                                    GameModel.currentLocale.RemoveItem("Owlett_Monster");
+                                    GameModel.currentIntObj.SetActive(false);
+                                    GameModel.currentIntObj = null;
                                 }
                             }
                             catch

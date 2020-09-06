@@ -88,18 +88,6 @@ public class MenuController : MonoBehaviour
         
     }
 
-    void loadMenu()
-    {
-        // menu screen for later
-    }
-
-    void OnTriggerEnter2D(Collider2D encounter)
-    {
-        if (encounter.gameObject.tag == "Encounter")
-        {
-
-        }
-    }
     public void ToggleSound()
     {
         if (PlayerPrefs.GetInt("Muted", 0) == 0)

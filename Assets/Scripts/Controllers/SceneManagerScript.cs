@@ -11,25 +11,28 @@ public class SceneManagerScript : MonoBehaviour
     private GameObject parentLocation;
     private Transform[] locations;
 
-    public void LoadInventory()
-    {
-        SaveState();
-        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(1);
-    }
 
     public void LoadMenu()
     {
-        SaveState();
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(0);
     }
 
     public void LoadScene(string sceneName)
     {
+        GameModel.sceneChanged = true;
         SceneManager.LoadScene(sceneName);
-        GameObject Player = GameObject.Find("Player");
-        //Player.GetComponent<Transform>().position.x = GameModel.playerPositionx;
+    }
+
+    public void BuildScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void LoadInventory(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+        GameModel.LoadInventoryItems();
     }
 
     //public void LoadStory()
@@ -51,25 +54,13 @@ public class SceneManagerScript : MonoBehaviour
     //}
 
 
-    //private int sceneToContinue;
-
+    // To implement after save file functionality
     //public void ContinueGame()
-    //{;
+    //{
     //    if (GameModel.currentLocale != null)
-    //        SceneManager.LoadScene(sceneToContinue);
+    //        SceneManager.LoadScene(1);
     //    else
     //        return;
     //}
 
-    public void SaveState()
-    {
-        GameModel.currentPlayer = GameObject.Find("Player");
-    }
-
-    public void LoadInventoryTest()
-    {
-        //GameModel.Test = GameModel.Test + 1;
-        //GameObject.Find("Testies").GetComponent<Text>().text = Convert.ToString(GameModel.Test);
-        GameModel.LoadInventoryItems();
-    }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ConnectGameModel : MonoBehaviour
 {
@@ -11,8 +12,11 @@ public class ConnectGameModel : MonoBehaviour
         {
             GameModel.Name = "Vexed Text";
             GameModel.MakeGame();
-            GameModel.itemList = Resources.LoadAll<GameObject>("file:../Assets/Prefabs/Items");
+            GameModel.storyHead = GameObject.Find("OutputField").GetComponent<Text>();
+            GameModel.storyNarrative = GameObject.Find("StoryNarrative").GetComponent<Text>();
+            GameModel.currentPlayer = GameObject.Find("Player");
         }
+        GameModel.loadLevel.LoadLocation();
     } 
 
 }

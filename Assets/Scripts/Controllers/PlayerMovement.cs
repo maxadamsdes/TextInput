@@ -20,8 +20,6 @@ public class PlayerMovement : MonoBehaviour
 	private GameObject playerObj;
 	public bool joystickDown;
 	protected Joystick joystick;
-	public GameObject[] inventory = GameModel.inventory;
-	public GameObject[] itemsList = GameModel.itemList;
 
 	void Start()
     {
