@@ -22,7 +22,16 @@ public class SpawnItems : MonoBehaviour
     {
         foreach (KeyValuePair<string, Vector3> entry in GameModel.currentLocale.Items)
         {
-            GameObject.Find(entry.Key).SetActive(false);
+            try
+            {
+                GameObject.Find(entry.Key).SetActive(false);
+            }
+            catch
+            {
+                System.Console.WriteLine("Destroyed all objects in scene");
+                break;
+            }
+            
         }
     }
 

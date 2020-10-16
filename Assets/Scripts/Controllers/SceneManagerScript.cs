@@ -10,12 +10,13 @@ public class SceneManagerScript : MonoBehaviour
     private int currentSceneIndex;
     private GameObject parentLocation;
     private Transform[] locations;
-
+    private LoadLevel loadLevel;
 
     public void LoadMenu()
     {
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(0);
+        
     }
 
     public void LoadScene(string sceneName)
@@ -35,6 +36,12 @@ public class SceneManagerScript : MonoBehaviour
         GameModel.LoadInventoryItems();
     }
 
+    public void LoadStory()
+    {
+        loadLevel = new LoadLevel();
+        SceneManager.LoadScene(2);
+        loadLevel.LoadLocation();
+    }
     //public void LoadStory()
     //{
     //    SceneManager.LoadScene(2);

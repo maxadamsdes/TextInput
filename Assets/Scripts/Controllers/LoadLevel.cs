@@ -1,17 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LoadLevel : MonoBehaviour
 { 
     public Transform[] locations;
     public GameObject parentLocation;
+    public Text storyHead;
+    public Text storyNarrative;
 
     public void Awake()
     {
         parentLocation = GameObject.Find("Locations");
         parentLocation.GetComponentsInChildren<Transform>(true);
         locations = parentLocation.GetComponentsInChildren<Transform>(true);
+        
     }
 
     public void LoadLocation()
@@ -56,15 +60,21 @@ public class LoadLevel : MonoBehaviour
 
     public void LoadGame()
     {
+        if (GameModel.currentLocale == null)
+        {
 
+            LoadLocation();
+        }
+        
         if (GameModel.nextLocale != null)
         {
             SpawnItems.DestroyGameObjects();
             GameModel.currentLocale = GameModel.nextLocale;
             SpawnItems.LoadGameObjects();
         }
-        GameModel.storyHead.text = GameModel.currentLocale.Name;
-        GameModel.storyNarrative.text = GameModel.currentLocale.Story;
+        storyHead.text = GameModel.currentLocale.Name;
+        storyNarrative.text = GameModel.currentLocale.Story;
         GameModel.menuController.exitText();
     }
+  
 }
