@@ -74,6 +74,50 @@ public static class GameModel
         }
     }
 
+    public static Player cPlayer = null;
+    public static Location startLocation;
+    public static DataService ds = new DataService("Tut2DATABASE.db");
+
+    // enum type for value that is one of these.
+    // Here enum is being used to determine 
+    // Login Reg statuses.
+    public enum PasswdMode
+    {
+        NeedName,
+        NeedPassword,
+        OK,
+        AllBad
+    }
+
+    public static PasswdMode CheckPassword(string pName, string pPassword)
+    {
+        PasswdMode result = GameModel.PasswdMode.AllBad;
+
+        Player aPlayer = ds.getPlayer(pName);
+        if (aPlayer != null)
+        {
+            if (aPlayer.Password == pPassword)
+            {
+                result = GameModel.PasswdMode.OK;
+                GameModel.cPlayer = aPlayer; // << WATCHOUT THIS IS A SIDE EFFECT
+                GameModel.currentLocale = GameModel.ds.GetPlayerLocation(GameModel.cPlayer);
+            }
+            else
+            {
+                result = GameModel.PasswdMode.NeedPassword;
+            }
+        }
+        else
+            result = GameModel.PasswdMode.NeedName;
+
+        return result;
+    }
+
+    public static void RegisterPlayer(string pName, string pPassword)
+    {
+
+        GameModel.cPlayer = GameModel.ds.storeNewPlayer(pName, pPassword, GameModel.currentLocale.Id, 100, 200);
+    }
     public static void MakeGame()
     {
         Location forest, cave, cave2, beach, river, highway, ocean;
