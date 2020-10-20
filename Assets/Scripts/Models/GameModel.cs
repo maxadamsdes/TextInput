@@ -11,6 +11,7 @@ public static class GameModel
 {
     public static Location currentLocale = new Location();
     public static Location nextLocale = new Location();
+    public static LocationItems locationItems = new LocationItems();
     public static LoadLevel loadLevel = new LoadLevel();
     public static GameObject currentPlayer = new GameObject();
     public static GameObject currentIntObj = new GameObject();
@@ -25,28 +26,25 @@ public static class GameModel
     public static string nextLocation;
     public static int itemToAdd;
     public static bool sceneChanged = true;
-
     public static List<Items> items = new List<Items>() {
-        new Items(){ Id = 1, Name="Coin", Icon= Resources.Load<Sprite>("Coin") },
-        new Items(){ Id = 2, Name="Rune", Icon= Resources.Load<Sprite>("Rune") },
-        new Items(){ Id = 3, Name="Key", Icon= Resources.Load<Sprite>("Key") },
-        new Items(){ Id = 4, Name="Sword", Icon= Resources.Load<Sprite>("Sword") }
+        new Items(){ Id = 1, Name="Coin" },
+        new Items(){ Id = 2, Name="Rune" },
+        new Items(){ Id = 3, Name="Key" },
+        new Items(){ Id = 4, Name="Sword" }
     };
     public static List<Items> inventory = new List<Items>(10) {
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
-        new Items(){ Id = 0, Name="Empty", Icon= Resources.Load<Sprite>("Empty") },
+        new Items(){ Id = 0, Name="Empty" },
+        new Items(){ Id = 0, Name="Empty" },
+        new Items(){ Id = 0, Name="Empty" },
+        new Items(){ Id = 0, Name="Empty" },
+        new Items(){ Id = 0, Name="Empty" },
+        new Items(){ Id = 0, Name="Empty" },
+        new Items(){ Id = 0, Name="Empty" },
+        new Items(){ Id = 0, Name="Empty" },
+        new Items(){ Id = 0, Name="Empty" },
+        new Items(){ Id = 0, Name="Empty" },
     };
     public static void DestroyGameObject(GameObject obj, float t = 0.0F) { }
-
-
     static String _name;
     public static string Name
     {
@@ -60,7 +58,6 @@ public static class GameModel
         }
 
     }
-
     static String _event;
     public static string Event
     {
@@ -73,10 +70,9 @@ public static class GameModel
             _event = value;
         }
     }
-
     public static Player cPlayer = null;
     public static Location startLocation;
-    public static DataService ds = new DataService("Tut2DATABASE.db");
+    public static DataService ds = new DataService("VexedText.db");
 
     // enum type for value that is one of these.
     // Here enum is being used to determine 
@@ -120,22 +116,27 @@ public static class GameModel
     }
     public static void MakeGame()
     {
+        GameModel.ds.CreateDB();
         Location forest, cave, cave2, beach, river, highway, ocean;
         currentLocale = new Location
         {
             Name = "Forest",
             Story = " Run!!",
-            NEntry = new Vector3(0f, -1.6f, 0f),
-            SEntry = new Vector3(0f, -1.6f, 0f),
-            EEntry = new Vector3(0f, -1.6f, 0f),
-            WEntry = new Vector3(0f, -1.6f, 0f)
+            NEntryX = 0f,
+            NEntryY = -1.6f,
+            SEntryX = 0f,
+            SEntryY = -1.6f,
+            EEntryX = 0f,
+            EEntryY = -1.6f,
+            WEntryX = 0f,
+            WEntryY = -1.6f,
         };
 
         // forest
         forest = currentLocale;
-        forest.addLocation("North", "Cave", "Lava", new Vector3(0f, -1.6f, 0f), new Vector3(15.76392f, -0.8335584f, 0f), new Vector3(0f, -1.6f, 0f), new Vector3(0f, -1.6f, 0f)); //
-        forest.addLocation("East", "Beach", "Sharks", new Vector3(0f, -1.6f, 0f), new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(23.29f, 0.49f, 0f)); //
-        forest.addLocation("West", "Highway", "Highwaymen!", new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(-3.58f, -1.6f, 0f), new Vector3(0f, 0f, 0f)); //
+        forest.addLocation("North", "Cave", "Lava", 0f, -1.6f, 15.76392f, -0.8335584f, 0f, -1.6f, 0f, -1.6f); //
+        forest.addLocation("East", "Beach", "Sharks", 0f, -1.6f, 0f, 0f, 0f, 0f, 23.29f, 0.49f); //
+        forest.addLocation("West", "Highway", "Highwaymen!", 0f, 0f, 0f, 0f, -3.58f, -1.6f, 0f, 0f); //
         forest.AddItem("Coin", new Vector3(22.18f, -0.03f, 0f));
         forest.AddItem("Chest", new Vector3(5.46f, -0.9011428f, 1f));
         forest.AddItem("Key", new Vector3(-2.53f, -2f, 0f));
@@ -146,7 +147,7 @@ public static class GameModel
         // cave
         cave = forest.getLocation("North");
         cave.addLocation("South", forest);
-        cave.addLocation("East", "Cave2", "Enemies?", new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(24.2f, 1.06f, 0f), new Vector3(0f, -1.6f, 0f)); //
+        cave.addLocation("East", "Cave2", "Enemies?", 0f, 0f, 0f, 0f, 24.2f, 1.06f, 0f, -1.6f); //
         cave.AddItem("Coin", new Vector3(0, 0, 0));
         cave.AddItem("Rune", new Vector3(0, 0, 0));
         cave.AddItem("Chest", new Vector3(0, 0, 0));
@@ -155,7 +156,7 @@ public static class GameModel
         // cave 2
         cave2 = cave.getLocation("East");
         cave2.addLocation("West", cave);
-        cave2.addLocation("East", "River", "Bridge", new Vector3(0f, 0f, 0f), new Vector3(0f, -1.6f, 0f), new Vector3(0f, -1.6f, 0f), new Vector3(24.36617f, 1.045399f, 0f)); //
+        cave2.addLocation("East", "River", "Bridge", 0f, 0f, 0f, -1.6f, 0f, -1.6f, 24.36617f, 1.045399f); //
         river = cave2.getLocation("East");
         cave2.AddItem("Coin", new Vector3(0, 0, 0));
         cave2.AddItem("Rune", new Vector3(0, 0, 0));
@@ -166,7 +167,7 @@ public static class GameModel
         // beach
         beach = forest.getLocation("East");
         beach.addLocation("West", forest);
-        beach.addLocation("North", "Ocean", "I guess you're amphibious", new Vector3(0f, -1.6f, 0f), new Vector3(19.09783f, -0.8661194f, 0f), new Vector3(0f, 0f, 0f), new Vector3(24.36617f, 1.045399f, 0f));
+        beach.addLocation("North", "Ocean", "I guess you're amphibious", 0f, -1.6f, 19.09783f, -0.861194f, 0f, 0f, 24.36617f, 1.045399f);
         ocean = beach.getLocation("North");
         beach.AddItem("Coin", new Vector3(0, 0, 0));
         beach.AddItem("Rune", new Vector3(0, 0, 0));
@@ -229,7 +230,7 @@ public static class GameModel
                 invText = GameObject.Find("ItemText" + (Convert.ToString(i + 1))).GetComponent<Text>();
                 invText.text = inventory[i].Name;
                 GameObject invItemImage = GameObject.Find("ItemImage" + (Convert.ToString(i + 1)));
-                invItemImage.GetComponent<Image>().sprite = inventory[i].Icon;
+                invItemImage.GetComponent<Image>().sprite = Resources.Load("ItemPrefabs/" + inventory[i].Name) as Sprite;
             }
             else
             {

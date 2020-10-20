@@ -10,6 +10,7 @@ public class ConnectGameModel : MonoBehaviour
     {
         if (GameModel.Name != "Vexed Text")
         {
+
             GameModel.Name = "Vexed Text";
             GameModel.MakeGame();
             GameModel.storyHead = GameObject.Find("OutputField").GetComponent<Text>();

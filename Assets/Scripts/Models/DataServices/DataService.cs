@@ -133,23 +133,26 @@ public class DataService  {
     {
         return GetLocation(aPlayer.Id);
     }
-    public Location storeNewLocation(string pName, string pStory, Vector3 pNEntry, Vector3 pSEntry, Vector3 pEEntry, Vector3 pWEntry)
+    public Location storeNewLocation(string pName, string pStory, float pNEntryX, float pNEntryY, float pSEntryX, float pSEntryY, float pEEntryX, float pEEntryY, float pWEntryX, float pWEntryY)
     {
         Location newLocation = new Location
         {
             Name = pName,
             Story = pStory,
-            NEntry = pNEntry,
-            SEntry = pSEntry,
-            EEntry = pEEntry,
-            WEntry = pWEntry
+            NEntryX = pNEntryX,
+            NEntryY = pNEntryY,
+            SEntryX = pSEntryX,
+            SEntryY = pSEntryY,
+            WEntryX = pWEntryX,
+            WEntryY = pWEntryY,
+            EEntryX = pEEntryX,
+            EEntryY = pEEntryY
         };
         _connection.Insert(newLocation); // Store the location 
         return newLocation;  // return the location
     }
     public Location storeLocation(Location pLocation)
     {
-  
         _connection.InsertOrReplace(pLocation); // Store the location 
         return pLocation; 
     }
@@ -191,27 +194,77 @@ public class DataService  {
         return _connection.Table<Player>().Where(x => x.Name == pPlayerName).FirstOrDefault();
     }
 
-    //   Example 
-    // public Person GetJohnny(){
-    //	return _connection.Table<Person>().Where(x => x.Name == "Johnny").FirstOrDefault();
-    //}
+    //Items
+    public Location AddItem(Location pLocation, string pItemName, float pPositionX, float pPositionY)
+    {
+        if (pLocation.Item1Name == null)
+        {
+            pLocation.Item1Name = pItemName;
+            pLocation.Item1PositionX = pPositionX;
+            pLocation.Item1PositionY = pPositionY;
+        }
+        else if (pLocation.Item2Name == null)
+        {
+            pLocation.Item2Name = pItemName;
+            pLocation.Item2PositionX = pPositionX;
+            pLocation.Item2PositionY = pPositionY;
+        }
+        else if (pLocation.Item3Name == null)
+        {
+            pLocation.Item3Name = pItemName;
+            pLocation.Item3PositionX = pPositionX;
+            pLocation.Item3PositionY = pPositionY;
+        }
+        _connection.Update(pLocation);
+        return pLocation;
+         
+    }
+    public Location RemoveItem(Location pLocation, string pItemName, float pItemPositionX)
+    {
+        if (pLocation.Item1Name == pItemName && pLocation.Item1PositionX == pItemPositionX)
+        {
+            pLocation.Item1Name = null;
+            pLocation.Item1PositionX = 0;
+            pLocation.Item1PositionY = 0;
+        }
+        else if (pLocation.Item2Name == pItemName && pLocation.Item2PositionX == pItemPositionX)
+        {
+            pLocation.Item2Name = null;
+            pLocation.Item2PositionX = 0;
+            pLocation.Item2PositionY = 0;
+        }
+        else if (pLocation.Item3Name == pItemName && pLocation.Item3PositionX == pItemPositionX)
+        {
+            pLocation.Item3Name = null;
+            pLocation.Item3PositionX = 0;
+            pLocation.Item3PositionY = 0;
+        }
+        _connection.Update(pLocation);
+        return pLocation;
+    }
 
-    //public Person CreatePerson(){
-    //	var p = new Person{
-    //			Name = "Johnny",
-    //			Surname = "Mnemonic",
-    //			Age = 21
-    //	};
-    //	_connection.Insert (p);
-    //	return p;
-    //}
 
-    //public IEnumerable<Person> GetPersons(){
-    //	return _connection.Table<Person>();
-    //}
+        //   Example 
+        // public Person GetJohnny(){
+        //	return _connection.Table<Person>().Where(x => x.Name == "Johnny").FirstOrDefault();
+        //}
 
-    //public IEnumerable<Person> GetPersonsNamedRoberto(){
-    //	return _connection.Table<Person>().Where(x => x.Name == "Roberto");
-    //}
+        //public Person CreatePerson(){
+        //	var p = new Person{
+        //			Name = "Johnny",
+        //			Surname = "Mnemonic",
+        //			Age = 21
+        //	};
+        //	_connection.Insert (p);
+        //	return p;
+        //}
 
-}
+        //public IEnumerable<Person> GetPersons(){
+        //	return _connection.Table<Person>();
+        //}
+
+        //public IEnumerable<Person> GetPersonsNamedRoberto(){
+        //	return _connection.Table<Person>().Where(x => x.Name == "Roberto");
+        //}
+
+    }
