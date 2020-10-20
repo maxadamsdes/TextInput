@@ -149,6 +149,7 @@ public class DataService  {
             EEntryY = pEEntryY
         };
         _connection.Insert(newLocation); // Store the location 
+        //GameModel.currentLocale = newLocation;
         return newLocation;  // return the location
     }
     public Location storeLocation(Location pLocation)
@@ -172,16 +173,13 @@ public class DataService  {
 
 
     // Player
-    public Player storeNewPlayer(string pName,   string pPassword , 
-                            int pLocationId,  int pHealth,
-                            int pWealth)
+    public Player storeNewPlayer(string pName, string pPassword, int pLocationId, int pWealth)
     {
         Player player = new Player
         {
-            Name = pName,
+            PlayerName = pName,
             Password = pPassword,
             LocationId = pLocationId,
-            Health = pHealth,
             Wealth = pWealth
 
         };
@@ -191,7 +189,7 @@ public class DataService  {
 
     public Player getPlayer(string pPlayerName)
     {
-        return _connection.Table<Player>().Where(x => x.Name == pPlayerName).FirstOrDefault();
+        return _connection.Table<Player>().Where(x => x.PlayerName == pPlayerName).FirstOrDefault();
     }
 
     //Items

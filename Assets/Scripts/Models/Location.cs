@@ -41,6 +41,7 @@ public class Location
     public float SEntryY { get => sEntryY; set => sEntryY = value; }
     public float EEntryY { get => eEntryY; set => eEntryY = value; }
     public float WEntryY { get => wEntryY; set => wEntryY = value; }
+    //public int Item1Id { get; set; }
     public string Item1Name { get => item1Name; set => item1Name = value; }
     public float Item1PositionX { get => item1PositionX; set => item1PositionX = value; }
     public float Item1PositionY { get => item1PositionY; set => item1PositionY = value; }
