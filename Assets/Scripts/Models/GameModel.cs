@@ -197,6 +197,8 @@ public static class GameModel
         //highway.AddItem(highway, "Rune", 0, 0);
         highway.AddItem(highway, "Chest", 0, 0);
         //highway.AddItem(highway, "Key", 0, 0);
+
+        nextLocale = currentLocale;
     }
 
     public static void AddItem()

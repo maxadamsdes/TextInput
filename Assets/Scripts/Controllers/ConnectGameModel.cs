@@ -21,7 +21,7 @@ public class ConnectGameModel : MonoBehaviour
                 GameModel.currentPlayer = GameObject.Find("Player");
                 GameModel.ds.getPlayer(GameModel.cPlayer.PlayerName);
             }
-            GameModel.loadLevel.LoadLocation();
+            GameModel.loadLevel.StartLocation();
         }
         
     } 
