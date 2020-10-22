@@ -6,30 +6,20 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
-    public GameObject menu;
-    public GameObject menuButton;
-    public InputField input;
-    public Text textField;
-    public GameObject playerObj;
+    
     public GameObject audioOnIcon;
     public GameObject audioOffIcon;
-    public GameObject joysticks;
     public string itemName;
     public string itemTag;
-    private GameObject item;
     private bool isShowing = false;
-    public Camera m_OrthographicCamera;
     float m_ViewPositionX, m_ViewPositionY;
     bool exit;
-    static TouchScreenKeyboard touchScreenKeyboard;
 
     void Start()
     {
-        playerObj = GameModel.currentPlayer;
-        m_OrthographicCamera.enabled = true;
-        m_OrthographicCamera.orthographic = true;
-        m_OrthographicCamera.orthographicSize = 5.0f;
-        //touchScreenKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+        GameModel.m_OrthographicCamera.enabled = true;
+        GameModel.m_OrthographicCamera.orthographic = true;
+        GameModel.m_OrthographicCamera.orthographicSize = 5.0f;
         isShowing = false;
     }
 
@@ -42,11 +32,6 @@ public class MenuController : MonoBehaviour
                 // closes text inputs if open
                 exitText();
             }
-            //else
-            //{
-            //    // otherwise loads menu. To implement later
-            //    loadMenu();
-            //}
         }
     }
     //Opens "text input" panel and disables movement
@@ -56,15 +41,15 @@ public class MenuController : MonoBehaviour
         {
             //touchScreenKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false);
             isShowing = true;
-            menuButton.SetActive(false);
-            joysticks.GetComponentInChildren<FloatingJoystick>().OnPointerUp2();
-            joysticks.SetActive(false);
-            menu.SetActive(true);
-            input.ActivateInputField();
-            playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-            m_OrthographicCamera.orthographic = true;
-            m_OrthographicCamera.orthographicSize = 4.0f;
-            m_OrthographicCamera.transform.position += new Vector3(0, -5f, 0);
+            GameModel.menuButton.SetActive(false);
+            GameModel.joysticks.GetComponentInChildren<FloatingJoystick>().OnPointerUp2();
+            GameModel.joysticks.SetActive(false);
+            GameModel.input.SetActive(true);
+            GameModel.textInput.ActivateInputField();
+            GameModel.currentPlayer.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            GameModel.m_OrthographicCamera.orthographic = true;
+            GameModel.m_OrthographicCamera.orthographicSize = 4.0f;
+            GameModel.m_OrthographicCamera.transform.position += new Vector3(0, -5f, 0);
         }
     }
 
@@ -72,17 +57,17 @@ public class MenuController : MonoBehaviour
     public void exitText()
     {
         isShowing = false;
-        textField.text = "";
-        menu.SetActive(false);
-        joysticks.SetActive(true);
-        menuButton.SetActive(true);
-        playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-        playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-        playerObj.GetComponent<PlayerMovement>().enabled = true;
-        playerObj.GetComponent<PlayerMovement>().locked = false;
-        m_OrthographicCamera.orthographic = true;
-        m_OrthographicCamera.orthographicSize = 5.0f;
-        m_OrthographicCamera.transform.position += new Vector3(0, 5f, 0);
+        GameModel.textInput.text = "";
+        GameModel.input.SetActive(false);
+        GameModel.joysticks.SetActive(true);
+        GameModel.menuButton.SetActive(true);
+        GameModel.currentPlayer.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+        GameModel.currentPlayer.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+        GameModel.currentPlayer.GetComponent<PlayerMovement>().enabled = true;
+        GameModel.currentPlayer.GetComponent<PlayerMovement>().locked = false;
+        GameModel.m_OrthographicCamera.orthographic = true;
+        GameModel.m_OrthographicCamera.orthographicSize = 5.0f;
+        GameModel.m_OrthographicCamera.transform.position += new Vector3(0, 5f, 0);
         
     }
 

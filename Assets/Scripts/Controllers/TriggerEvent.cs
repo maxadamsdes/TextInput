@@ -9,8 +9,6 @@ public class TriggerEvent : MonoBehaviour
     public Text storyNarrative;
     public InteractionObject currentInterObjScript = null;
     public Animator anim;
-    
-    
     public bool failsafe = false;
     string locationStr;
     public Collider2D Destination;
@@ -144,6 +142,7 @@ public class TriggerEvent : MonoBehaviour
         {
             Destination = null;
             storyHead.text = GameModel.currentLocale.Name;
+            
         }
         else
         {

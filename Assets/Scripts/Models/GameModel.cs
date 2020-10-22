@@ -20,6 +20,11 @@ public static class GameModel
     public static bool pickUpAble = false;
     public static Text storyHead;
     public static Text storyNarrative;
+    public static Camera m_OrthographicCamera;
+    public static GameObject menuButton;
+    public static GameObject input;
+    public static InputField textInput;
+    public static GameObject joysticks;
     public static MenuController menuController = new MenuController();
     private static Text invText;
     public static Dictionary<int, Vector3> savedPositions = new Dictionary<int, Vector3>();
@@ -240,6 +245,12 @@ public static class GameModel
                 break;
             }
         }
+    }
+
+    public static void UpdateDisplay()
+    {
+        storyHead.text = currentLocale.Name;
+        storyNarrative.text = currentLocale.Story;
     }
 }
 

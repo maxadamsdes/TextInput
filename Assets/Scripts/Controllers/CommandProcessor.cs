@@ -87,6 +87,7 @@ public class CommandProcessor
                             else
                             {
                                 GameModel.nextLocation = "North";
+                                GameModel.sceneChanged = true;
                                 GameModel.loadLevel.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
                             }
@@ -102,6 +103,7 @@ public class CommandProcessor
                             else
                             {
                                 GameModel.nextLocation = "South";
+                                GameModel.sceneChanged = true;
                                 GameModel.loadLevel.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
                             }
@@ -116,6 +118,7 @@ public class CommandProcessor
                             else
                             {
                                 GameModel.nextLocation = "East";
+                                GameModel.sceneChanged = true;
                                 GameModel.loadLevel.LoadLocation();
                                 strResult = GameModel.currentLocale.Name;
                             }
@@ -163,9 +166,10 @@ public class CommandProcessor
                         }
                         else
                         {
+                            GameModel.sceneChanged = true;
                             GameModel.loadLevel.LoadLocation();
+                            triggered.failsafe = true;
                         }
-                        triggered.failsafe = true;
                         strResult = GameModel.currentLocale.Name;
                     }
                     else if (parts.Length == 1)

@@ -6,6 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class ConnectGameModel : MonoBehaviour
 {
+    public InputField inputField;
+    public GameObject input;
+    public GameObject joysticks;
+    public GameObject menuButton;
+    public Camera m_OrthographicCamera;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -26,6 +32,11 @@ public class ConnectGameModel : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         if (scene.name == "Game")
         {
+            GameModel.m_OrthographicCamera = m_OrthographicCamera;
+            GameModel.joysticks = joysticks;
+            GameModel.menuButton = menuButton;
+            GameModel.input = input;
+            GameModel.textInput = inputField;
             GameModel.storyHead = GameObject.Find("OutputField").GetComponent<Text>();
             GameModel.storyNarrative = GameObject.Find("StoryNarrative").GetComponent<Text>();
             GameModel.currentPlayer = GameObject.Find("Player");
