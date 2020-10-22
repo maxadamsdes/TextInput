@@ -86,7 +86,7 @@ public class Location
         ToFrom tf = GameModel.ds.GetToFrom(Id, pDirection);
         if (tf != null)
             thisLocation = GameModel.ds.GetLocation(tf.ToID);
-
+        
         return thisLocation;
     }
 

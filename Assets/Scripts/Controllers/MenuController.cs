@@ -25,7 +25,7 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
-        playerObj = GameObject.FindGameObjectWithTag("Player");
+        playerObj = GameModel.currentPlayer;
         m_OrthographicCamera.enabled = true;
         m_OrthographicCamera.orthographic = true;
         m_OrthographicCamera.orthographicSize = 5.0f;
@@ -49,7 +49,7 @@ public class MenuController : MonoBehaviour
             //}
         }
     }
-
+    //Opens "text input" panel and disables movement
     public void openText()
     {
         if (isShowing != true)
@@ -68,26 +68,25 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    //Closes the "text input" panel and reenables movement
     public void exitText()
     {
-        if (isShowing == true)
-        {
-            isShowing = false;
-            textField.text = "";
-            menu.SetActive(false);
-            joysticks.SetActive(true);
-            menuButton.SetActive(true);
-            playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-            playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-            playerObj.GetComponent<PlayerMovement>().enabled = true;
-            playerObj.GetComponent<PlayerMovement>().locked = false;
-            m_OrthographicCamera.orthographic = true;
-            m_OrthographicCamera.orthographicSize = 5.0f;
-            m_OrthographicCamera.transform.position += new Vector3(0, 5f, 0);
-        }
+        isShowing = false;
+        textField.text = "";
+        menu.SetActive(false);
+        joysticks.SetActive(true);
+        menuButton.SetActive(true);
+        playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+        playerObj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+        playerObj.GetComponent<PlayerMovement>().enabled = true;
+        playerObj.GetComponent<PlayerMovement>().locked = false;
+        m_OrthographicCamera.orthographic = true;
+        m_OrthographicCamera.orthographicSize = 5.0f;
+        m_OrthographicCamera.transform.position += new Vector3(0, 5f, 0);
         
     }
 
+    // toggles the sound state to muted or on
     public void ToggleSound()
     {
         if (PlayerPrefs.GetInt("Muted", 0) == 0)
@@ -101,6 +100,7 @@ public class MenuController : MonoBehaviour
         SetSoundState();
     }
 
+    // changes the state of sound to mute or unmute
     private void SetSoundState()
     {
         if (PlayerPrefs.GetInt("Muted", 0) == 0)

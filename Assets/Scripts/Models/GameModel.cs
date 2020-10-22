@@ -96,7 +96,7 @@ public static class GameModel
             {
                 result = GameModel.PasswdMode.OK;
                 GameModel.cPlayer = aPlayer; // << WATCHOUT THIS IS A SIDE EFFECT
-                GameModel.currentLocale = GameModel.ds.GetPlayerLocation(GameModel.cPlayer);
+                GameModel.currentLocale = GameModel.ds.GetPlayerLocation(cPlayer);
             }
             else
             {
@@ -134,6 +134,7 @@ public static class GameModel
 
         // forest
         forest = currentLocale;
+        GameModel.ds.storeLocation(forest);
         forest.addLocation("North", "Cave", "Lava", 0f, -1.6f, 15.76392f, -0.8335584f, 0f, -1.6f, 0f, -1.6f); //
         forest.addLocation("East", "Beach", "Sharks", 0f, -1.6f, 0f, 0f, 0f, 0f, 23.29f, 0.49f); //
         forest.addLocation("West", "Highway", "Highwaymen!", 0f, 0f, 0f, 0f, -3.58f, -1.6f, 0f, 0f); //

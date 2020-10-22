@@ -39,8 +39,10 @@ public class LoadLevel : MonoBehaviour
                 GameModel.sceneChanged = true;
                 SpawnItems.DestroyGameObjects();
                 GameModel.currentLocale = GameModel.nextLocale;
+                GameModel.cPlayer.LocationId = GameModel.currentLocale.Id;
+                GameModel.ds.updatePlayerLocation(GameModel.cPlayer);
                 SpawnItems.LoadGameObjects();
-                GameModel.storyHead.text = GameModel.currentLocale.Name;
+                GameModel.storyHead.text = "Test";//GameModel.currentLocale.Name;
                 GameModel.storyNarrative.text = GameModel.currentLocale.Story;
                 GameModel.menuController.exitText();
                 break;

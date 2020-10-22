@@ -96,9 +96,9 @@ public class DataService  {
     /* ====== */
 	public void CreateDB(){
         // remove these once testing is sorted
-       // _connection.DropTable<Location>(); 
-       // _connection.DropTable<ToFrom>();
-       // _connection.DropTable<Player>();
+       //_connection.DropTable<Location>(); 
+       //_connection.DropTable<ToFrom>();
+       //_connection.DropTable<Player>();
 
         // creating the schema
         _connection.CreateTable<Location>();
@@ -131,8 +131,20 @@ public class DataService  {
 
     public Location GetPlayerLocation (Player aPlayer)
     {
-        return GetLocation(aPlayer.Id);
+        return GetLocation(aPlayer.LocationId);
     }
+
+    public void updatePlayerLocation(Player pPlayer)
+    {
+        _connection.InsertOrReplace(pPlayer);
+    }
+
+    public Location getGameExist()
+    {
+        return _connection.Table<Location>().Where(l => l.Id == 0).FirstOrDefault();
+    }
+
+
     public Location storeNewLocation(string pName, string pStory, float pNEntryX, float pNEntryY, float pSEntryX, float pSEntryY, float pEEntryX, float pEEntryY, float pWEntryX, float pWEntryY)
     {
         Location newLocation = new Location
@@ -183,7 +195,7 @@ public class DataService  {
             Wealth = pWealth
 
         };
-        _connection.InsertOrReplace(player);
+        _connection.Insert(player);
         return player;
     }
 
