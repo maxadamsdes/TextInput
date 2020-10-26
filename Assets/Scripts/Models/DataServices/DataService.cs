@@ -104,6 +104,7 @@ public class DataService  {
         _connection.CreateTable<Location>();
         _connection.CreateTable<ToFrom>();
         _connection.CreateTable<Player>();
+        _connection.CreateTable<Items>();
 
     }
 
@@ -253,6 +254,13 @@ public class DataService  {
         return pLocation;
     }
 
+    public void AddPlayerItem(Player pPlayer, Location pLocation, string pItemName)
+    {
+        Items newItem = new Items();
+        newItem.PlayerID = pPlayer.Id;
+        newItem.LocationID = pLocation.Id;
+        _connection.Insert(newItem);
+    }
 
         //   Example 
         // public Person GetJohnny(){

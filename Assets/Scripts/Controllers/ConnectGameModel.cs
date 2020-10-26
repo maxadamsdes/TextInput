@@ -8,6 +8,8 @@ public class ConnectGameModel : MonoBehaviour
 {
     public InputField inputField;
     public GameObject input;
+    public Text storyHead;
+    public Text storyNarrative;
     public GameObject joysticks;
     public GameObject menuButton;
     public Camera m_OrthographicCamera;
@@ -37,8 +39,8 @@ public class ConnectGameModel : MonoBehaviour
             GameModel.menuButton = menuButton;
             GameModel.input = input;
             GameModel.textInput = inputField;
-            GameModel.storyHead = GameObject.Find("OutputField").GetComponent<Text>();
-            GameModel.storyNarrative = GameObject.Find("StoryNarrative").GetComponent<Text>();
+            GameModel.storyHead = storyHead;
+            GameModel.storyNarrative = storyNarrative;
             GameModel.currentPlayer = GameObject.Find("Player");
             GameModel.loadLevel.StartLocation();
         }

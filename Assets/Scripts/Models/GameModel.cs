@@ -118,6 +118,7 @@ public static class GameModel
     {
 
         GameModel.cPlayer = GameModel.ds.storeNewPlayer(pName, pPassword, 0, 0);
+        GameModel.currentLocale = GameModel.ds.GetPlayerLocation(cPlayer);
     }
     public static void MakeGame()
     {
@@ -204,29 +205,33 @@ public static class GameModel
         highway.AddItem(highway, "Chest", 0, 0);
         //highway.AddItem(highway, "Key", 0, 0);
 
+        //currentLocale = forest;
         nextLocale = currentLocale;
+        
     }
 
-    public static void AddItem()
+    public static void AddItem(Location pLocation, Player pPlayer, string pItemName)
     {
+        ds.AddPlayerItem(pPlayer, pLocation, pItemName);
+
         // Find first open slot in inventory
-        for (int i = 0; i < inventory.Count; i++)
-        {
-            if (inventory[i].Id == 0)
-            {
-                inventory[i] = items[itemToAdd];
-                Debug.Log(inventory[i].Name + " was added!");
-                itemAdded = true;
-                break;
-            }
+        //for (int i = 0; i < inventory.Count; i++)
+        //{
+        //    if (inventory[i].Id == 0)
+        //    {
+        //        inventory[i] = items[itemToAdd];
+        //        Debug.Log(inventory[i].Name + " was added!");
+        //        itemAdded = true;
+        //        break;
+        //    }
 
-            // If inventory was full
-            if (!itemAdded)
-            {
-                Debug.Log("Inventory Full - Item not Added");
-            }
+        //    // If inventory was full
+        //    if (!itemAdded)
+        //    {
+        //        Debug.Log("Inventory Full - Item not Added");
+        //    }
 
-        }
+        //}
     }
 
     public static void LoadInventoryItems()

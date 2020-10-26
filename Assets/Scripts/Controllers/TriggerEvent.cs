@@ -81,7 +81,7 @@ public class TriggerEvent : MonoBehaviour
             }
             else if (encounter.name == "RespawnerCave2")
             {
-                Vector3 temp = new Vector3(3.06f, 1.59f, 0);
+                Vector3 temp = new Vector3(1.503098f, -1.618875f, 0);
                 playerObj.transform.position = temp;
                 playerObj.GetComponent<PlayerMovement>().horizontalMove = 0f;
             }

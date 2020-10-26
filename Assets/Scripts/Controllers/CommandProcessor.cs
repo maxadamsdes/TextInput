@@ -36,7 +36,7 @@ public class CommandProcessor
                             if ((GameModel.currentIntObj.tag == "Item") && (GameModel.pickUpAble == true))
                             {
 
-                                GameModel.AddItem();
+                                GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, GameModel.currentIntObj.name);
                                 if (GameModel.itemAdded != true)
                                 {
                                     Debug.Log("Not enough space!");
@@ -191,7 +191,7 @@ public class CommandProcessor
                                 var randomint = rand.Next(GameModel.items.Count);
                                 var randomItem = GameModel.items[randomint];
                                 GameModel.itemToAdd = randomint;
-                                GameModel.AddItem();
+                                GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, GameModel.currentIntObj.name);
                                 if (GameModel.itemAdded != true)
                                 {
                                     Debug.Log("Not enough space!");
@@ -233,7 +233,7 @@ public class CommandProcessor
                                         try
                                         {
                                             GameModel.itemToAdd = 4;
-                                            GameModel.AddItem();
+                                            GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword");
                                             if (GameModel.itemAdded != true)
                                             {
                                                 Debug.Log("Not enough space!");
@@ -281,7 +281,7 @@ public class CommandProcessor
                                         try
                                         {
                                             GameModel.itemToAdd = 1;
-                                            GameModel.AddItem();
+                                            GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold");
                                             if (GameModel.itemAdded != true)
                                             {
                                                 Debug.Log("Not enough space!");
@@ -339,7 +339,7 @@ public class CommandProcessor
                                 if (!randomBool)
                                 {
                                     GameModel.itemToAdd = 3;
-                                    GameModel.AddItem();
+                                    GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword");
                                     if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");
@@ -352,7 +352,7 @@ public class CommandProcessor
                                     }
 
                                     GameModel.itemToAdd = 0;
-                                    GameModel.AddItem();
+                                    GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold");
                                     if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");
