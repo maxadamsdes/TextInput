@@ -56,7 +56,6 @@ public class PasswordRegController : MonoBehaviour
     public void RegisterPlayer()
     {
         GameModel.RegisterPlayer(Playername.text, Password.text);
-        //GameModel.ds.GetPlayerLocation(GameModel.cPlayer);
         HidePanels();
         SceneManager.LoadScene("Game");
     }

@@ -8,7 +8,7 @@ public class Items
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public int PlayerID { get; set; }
+    public string PlayerName { get; set; }
     public int LocationID { get; set; }
     public string Name { get; set; }
     public string Icon { get; set; }

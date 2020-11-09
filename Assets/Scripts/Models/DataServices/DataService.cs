@@ -12,8 +12,8 @@ using System.Collections.Generic;
 public class DataService  {
 
 	private SQLiteConnection _connection;
-
-	public DataService(string DatabaseName){
+    public SQLiteConnection Connection { get { return _connection; } }
+    public DataService(string DatabaseName){
 
 #if UNITY_EDITOR
             var dbPath = string.Format(@"Assets/StreamingAssets/{0}", DatabaseName);
@@ -99,14 +99,82 @@ public class DataService  {
        //_connection.DropTable<Location>(); 
        //_connection.DropTable<ToFrom>();
        //_connection.DropTable<Player>();
+       //_connection.DropTable<Items>();
 
         // creating the schema
         _connection.CreateTable<Location>();
         _connection.CreateTable<ToFrom>();
         _connection.CreateTable<Player>();
         _connection.CreateTable<Items>();
+        GameModel.jsDrop.Create<Player, JsnReceiver>(new Player
+        {
+            PlayerName = "UUUUUUUUUUUUUUUUUUUUUUUUU",
+            Score = 0,
+            LocationId = 0,
+            Password = "***************************"
+        }, jsnReceiverDel);
+
+        GameModel.jsDrop.Create<Location, JsnReceiver>(new Location
+        {
+            Id = 00000000000000000000,
+            Name = "UUUUUUUUUUUUUUUUUUUU",
+            Story = "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU",
+            NEntryX = 00000000000000000000,
+            SEntryX = 00000000000000000000,
+            WEntryX = 00000000000000000000,
+            EEntryX = 00000000000000000000,
+            NEntryY = 00000000000000000000,
+            SEntryY = 00000000000000000000,
+            WEntryY = 00000000000000000000,
+            EEntryY  = 00000000000000000000,
+            Item1Name = "UUUUUUUUUUUUUUUUUUUU",
+            Item1PositionX = 00000000000000000000,
+            Item1PositionY = 00000000000000000000,
+            Item2Name = "UUUUUUUUUUUUUUUUUUUU",
+            Item2PositionX = 00000000000000000000,
+            Item2PositionY = 00000000000000000000,
+            Item3Name = "UUUUUUUUUUUUUUUUUUUU",
+            Item3PositionX = 00000000000000000000,
+            Item3PositionY = 00000000000000000000,
+        }, jsnReceiverDel);
+        
 
     }
+
+    public void jsnReceiverDel(JsnReceiver pReceived)
+    {
+        Debug.Log(pReceived.JsnMsg + " ..." + pReceived.Msg);
+        // To do: parse and produce an appropriate response
+    }
+
+    public void jsnRegisterPlayer(List<Player> pReceivedList)
+    {
+        GameModel.jsDrop.Store<Player, JsnReceiver>(pReceivedList, jsnReceiverDel);
+    }
+
+    public void jsnGetPlayer(List<Player> pReceivedList)
+    {
+        GameModel.jsDrop.Select<Player, JsnReceiver>("PlayerName = '" + pReceivedList[0].PlayerName + "'", jsnPlayerListReceiverDel, jsnReceiverDel);
+    }
+
+    public void jsnPlayerListReceiverDel(List<Player> pReceivedList)
+    {
+        Debug.Log("Received items " + pReceivedList.Count);
+        foreach (Player lcReceived in pReceivedList)
+        {
+            Debug.Log("Received {" + lcReceived.PlayerName + "," + lcReceived.Password + "," + lcReceived.Score.ToString() + lcReceived.LocationId.ToString() + "}");
+        
+        }// for
+
+        // To do: produce an appropriate response
+    }
+
+
+    public void jsnLocationListReceiverDel(List<Location> pReceivedList)
+        {
+            _connection.DeleteAll<Location>();
+            _connection.InsertAll(pReceivedList);
+        }
 
     // Locations and their relationships 
     public IEnumerable<Location> GetLocations()
@@ -186,14 +254,14 @@ public class DataService  {
 
 
     // Player
-    public Player storeNewPlayer(string pName, string pPassword, int pLocationId, int pWealth)
+    public Player storeNewPlayer(string pName, string pPassword, int pLocationId, int pScore)
     {
         Player player = new Player
         {
             PlayerName = pName,
             Password = pPassword,
             LocationId = pLocationId,
-            Wealth = pWealth
+            Score = pScore
 
         };
         _connection.Insert(player);
@@ -257,32 +325,10 @@ public class DataService  {
     public void AddPlayerItem(Player pPlayer, Location pLocation, string pItemName)
     {
         Items newItem = new Items();
-        newItem.PlayerID = pPlayer.Id;
+        newItem.PlayerName = pPlayer.PlayerName;
         newItem.LocationID = pLocation.Id;
+        newItem.Name = pItemName;
         _connection.Insert(newItem);
     }
-
-        //   Example 
-        // public Person GetJohnny(){
-        //	return _connection.Table<Person>().Where(x => x.Name == "Johnny").FirstOrDefault();
-        //}
-
-        //public Person CreatePerson(){
-        //	var p = new Person{
-        //			Name = "Johnny",
-        //			Surname = "Mnemonic",
-        //			Age = 21
-        //	};
-        //	_connection.Insert (p);
-        //	return p;
-        //}
-
-        //public IEnumerable<Person> GetPersons(){
-        //	return _connection.Table<Person>();
-        //}
-
-        //public IEnumerable<Person> GetPersonsNamedRoberto(){
-        //	return _connection.Table<Person>().Where(x => x.Name == "Roberto");
-        //}
 
     }

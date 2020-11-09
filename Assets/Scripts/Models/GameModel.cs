@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 
 public static class GameModel
 {
+    public static JSONDropService jsDrop = new JSONDropService { Token = "e6e438ba-8877-411a-bdc2-f4270043413c" };
     public static Location currentLocale = new Location();
     public static Location nextLocale = new Location();
     public static LocationItems locationItems = new LocationItems();
@@ -92,24 +93,27 @@ public static class GameModel
 
     public static PasswdMode CheckPassword(string pName, string pPassword)
     {
-        PasswdMode result = GameModel.PasswdMode.AllBad;
+        PasswdMode result = PasswdMode.AllBad;
 
         Player aPlayer = ds.getPlayer(pName);
         if (aPlayer != null)
         {
             if (aPlayer.Password == pPassword)
             {
-                result = GameModel.PasswdMode.OK;
-                GameModel.cPlayer = aPlayer; // << WATCHOUT THIS IS A SIDE EFFECT
-                GameModel.currentLocale = GameModel.ds.GetPlayerLocation(cPlayer);
+                result = PasswdMode.OK;
+                cPlayer = aPlayer; // << WATCHOUT THIS IS A SIDE EFFECT
+                currentLocale = ds.GetPlayerLocation(cPlayer);
+                List<Player> PlayerList = new List<Player>();
+                PlayerList.Add(cPlayer);
+                ds.jsnGetPlayer(PlayerList);
             }
             else
             {
-                result = GameModel.PasswdMode.NeedPassword;
+                result = PasswdMode.NeedPassword;
             }
         }
         else
-            result = GameModel.PasswdMode.NeedName;
+            result = PasswdMode.NeedName;
 
         return result;
     }
@@ -117,8 +121,11 @@ public static class GameModel
     public static void RegisterPlayer(string pName, string pPassword)
     {
 
-        GameModel.cPlayer = GameModel.ds.storeNewPlayer(pName, pPassword, 0, 0);
-        GameModel.currentLocale = GameModel.ds.GetPlayerLocation(cPlayer);
+        cPlayer = ds.storeNewPlayer(pName, pPassword, 0, 0);
+        currentLocale = ds.GetPlayerLocation(cPlayer);
+        List<Player> PlayerList = new List<Player>();
+        PlayerList.Add(cPlayer);
+        ds.jsnRegisterPlayer(PlayerList);
     }
     public static void MakeGame()
     {
@@ -207,7 +214,18 @@ public static class GameModel
 
         //currentLocale = forest;
         nextLocale = currentLocale;
-        
+
+        jsDrop.Store<Location, JsnReceiver>(new List<Location>
+        {
+            forest,
+            cave,
+            cave2,
+            beach,
+            river,
+            ocean,
+            highway
+
+        }, ds.jsnReceiverDel);
     }
 
     public static void AddItem(Location pLocation, Player pPlayer, string pItemName)

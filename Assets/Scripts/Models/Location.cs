@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using SQLite4Unity3d;
+using System;
+
+[Serializable]
 public class Location 
 {
 

@@ -99,6 +99,9 @@
     <Compile Include="Assets\Scripts\Models\Items.cs" />
     <Compile Include="Assets\Scripts\Models\Location.cs" />
     <Compile Include="Assets\Scripts\Models\LocationInformation.cs" />
+    <Compile Include="Assets\Scripts\Models\NetWorking\AkeakeState.cs" />
+    <Compile Include="Assets\Scripts\Models\NetWorking\JSONDropService.cs" />
+    <Compile Include="Assets\Scripts\Models\NetWorking\JsonDrop.cs" />
     <Compile Include="Assets\Scripts\Models\Player.cs" />
     <Compile Include="Assets\Scripts\Models\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Models\PlayerInventory.cs" />
@@ -279,6 +282,9 @@
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.5f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:/Users/maxad/Documents/GitHub/TextInput/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.5f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

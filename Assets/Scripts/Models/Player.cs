@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SQLite4Unity3d;
+using System;
 
+[Serializable]
 public class Player
 {
     
-    private int id;
     private string playerName;
     private string password;
     private int locationId;
     //private int health;
-    private int wealth;
-    [PrimaryKey, AutoIncrement]
-    public int Id { get => id; set => id = value; }
+    private int score;
+    [PrimaryKey]
     public string PlayerName { get => playerName; set => playerName = value; }
     public string Password { get => password; set => password = value; }
     public int LocationId { get => locationId; set => locationId = value; }
     //public int Health { get => health; set => health = value; }
-    public int Wealth { get => wealth; set => wealth = value; }
+    public int Score { get => score; set => score = value; }
    
 
 
@@ -34,7 +34,7 @@ public class Player
     {
         PlayerData data = SaveSystem.LoadPlayer();
         locationId = data.locationId;
-        //health = data.health;
+        score = data.score;
         Vector3 position;
         position.x = data.position[0];
         position.y = data.position[1];
