@@ -34,7 +34,6 @@ public class PasswordRegController : MonoBehaviour
     }
     public void CheckPassword()
     {
-
         HidePanels();
         switch (GameModel.CheckPassword(Playername.text, Password.text))
         {
@@ -50,7 +49,7 @@ public class PasswordRegController : MonoBehaviour
                 break;
 
         }
-        
+
     }
 
     public void RegisterPlayer()
@@ -64,6 +63,13 @@ public class PasswordRegController : MonoBehaviour
     {
         RegPanel.SetActive(false);
         PasspromptPanel.SetActive(false);
-        
+
+
+        //------------------------------------------------Only used for testing!!!!!!!!!!!!!!!!!------------------------------------------------
+        //
+        //GameModel.CheckPassword("max", "adams"); 
+        //HidePanels();
+        //SceneManager.LoadScene("Game");
+        //
     }
 }

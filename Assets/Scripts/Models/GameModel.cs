@@ -139,8 +139,8 @@ public static class GameModel
             NEntryY = -1.6f,
             SEntryX = 0f,
             SEntryY = -1.6f,
-            EEntryX = 0f,
-            EEntryY = -1.6f,
+            EEntryX = 23f,
+            EEntryY = 0.2f,
             WEntryX = 0f,
             WEntryY = -1.6f,
         };
@@ -149,7 +149,7 @@ public static class GameModel
         forest = currentLocale;
         GameModel.ds.storeLocation(forest);
         forest.addLocation("North", "Cave", "Lava", 0f, -1.6f, 15.76392f, -0.8335584f, 0f, -1.6f, 0f, -1.6f); //
-        forest.addLocation("East", "Beach", "Sharks", 0f, -1.6f, 0f, 0f, 0f, 0f, 23.29f, 0.49f); //
+        forest.addLocation("East", "Beach", "Sharks", 9f, 0.49f, 0f, 0f, 6.7f, -4.3f, 6.7f, -4.3f); //
         forest.addLocation("West", "Highway", "Highwaymen!", 0f, 0f, 0f, 0f, -3.58f, -1.6f, 0f, 0f); //
         //forest.AddItem(forest, "Coin", 22.18f, -0.03f);
         //forest.AddItem(forest, "Chest", 5.46f, -0.9011428f);
@@ -181,7 +181,7 @@ public static class GameModel
         // beach
         beach = forest.getLocation("East");
         beach.addLocation("West", forest);
-        beach.addLocation("North", "Ocean", "I guess you're amphibious", 0f, -1.6f, 19.09783f, -0.861194f, 0f, 0f, 24.36617f, 1.045399f);
+        beach.addLocation("North", "Ocean", "I guess you're amphibious", 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
         ocean = beach.getLocation("North");
         beach.AddItem(beach, "Coin", 0, 0);
         beach.AddItem(beach, "Rune", 0, 0);
