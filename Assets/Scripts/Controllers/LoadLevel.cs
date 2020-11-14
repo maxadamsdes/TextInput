@@ -60,6 +60,7 @@ public class LoadLevel : MonoBehaviour
         parentLocation = GameObject.Find("Locations");
         parentLocation.GetComponentsInChildren<Transform>(true);
         locations = parentLocation.GetComponentsInChildren<Transform>(true);
+        List<Items> itemList = GameModel.ds.GetLocationItems(GameModel.currentLocale, GameModel.cPlayer);
         GameModel.currentPlayer = GameObject.Find("Player");
         // Loops through the locations transform array 
         for (int i = 0; i < locations.Length; i++)

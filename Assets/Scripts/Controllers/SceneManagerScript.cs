@@ -35,6 +35,12 @@ public class SceneManagerScript : MonoBehaviour
         GameModel.LoadInventoryItems();
     }
 
+    public void LoadMap(string sceneName)
+    {
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(sceneName);
+    }
+
     //public void LoadStory()
     //{
     //    SceneManager.LoadScene(2);

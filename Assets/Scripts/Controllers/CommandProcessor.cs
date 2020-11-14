@@ -48,7 +48,7 @@ public class CommandProcessor
                                     strResult = GameModel.currentIntObj.name + " added to Inventory";
                                     storyNarrative.GetComponent<Text>().text = "Sweet as";
                                     GameModel.DestroyGameObject(GameModel.currentIntObj);
-                                    GameModel.currentLocale.RemoveItem(GameModel.currentLocale, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
                                     GameModel.currentIntObj.SetActive(false);
                                     GameModel.currentIntObj = null;
                                 }
@@ -203,7 +203,7 @@ public class CommandProcessor
                                     strResult = (randomItem.Name + " added to Inventory");
                                     storyNarrative.GetComponent<Text>().text = "Nice find!";
                                     anim.SetBool("Looted", true);
-                                    GameModel.currentLocale.RemoveItem(GameModel.currentLocale, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
                                     GameModel.currentIntObj.GetComponent<Collider2D>().enabled = false;
                                     GameModel.currentIntObj = null;
                                 }
@@ -244,8 +244,8 @@ public class CommandProcessor
                                                 Debug.Log("Got take Sword");
                                                 strResult = "Taken the sword!";
                                                 storyNarrative.GetComponent<Text>().text = "All power to you";
-                                                GameModel.currentLocale.RemoveItem(GameModel.currentLocale, "Sword", 0);
-                                                GameModel.currentLocale.RemoveItem(GameModel.currentLocale, "Gold", 0);
+                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Sword", 0f);
+                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Gold", 0f);
                                                 GameObject.Find("Sword").SetActive(false);
                                                 GameObject.Find("Gold").SetActive(false);
                                             }
@@ -292,8 +292,8 @@ public class CommandProcessor
                                                 Debug.Log("Got take Gold");
                                                 strResult = "Taken the Gold!";
                                                 storyNarrative.GetComponent<Text>().text = "A wise choice.";
-                                                GameModel.currentLocale.RemoveItem(GameModel.currentLocale, "Sword", 0);
-                                                GameModel.currentLocale.RemoveItem(GameModel.currentLocale, "Gold", 0);
+                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Sword", 0f);
+                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Gold", 0f);
                                                 GameObject.Find("Sword").SetActive(false);
                                                 GameObject.Find("Gold").SetActive(false);
                                             }
@@ -347,7 +347,7 @@ public class CommandProcessor
                                     }
                                     else
                                     {
-                                        GameModel.currentLocale.RemoveItem(GameModel.currentLocale, "Sword", 0);
+                                        GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Sword", 0f);
                                         GameObject.Find("Sword").SetActive(false);
                                     }
 
@@ -360,7 +360,7 @@ public class CommandProcessor
                                     }
                                     else
                                     {
-                                        GameModel.currentLocale.RemoveItem(GameModel.currentLocale, "Gold", 0);
+                                        GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Gold", 0f);
                                         GameObject.Find("Gold").SetActive(false);
                                     }
 
@@ -380,9 +380,9 @@ public class CommandProcessor
                                     strResult = "You were caught!";
                                     storyNarrative.GetComponent<Text>().text = "Naughty, naughty... Bye!";
                                     GameModel.currentIntObj.GetComponent<Text>().Equals("");
-                                    GameModel.currentLocale.RemoveItem(GameModel.currentLocale, "Sword", 0);
-                                    GameModel.currentLocale.RemoveItem(GameModel.currentLocale, "Gold", 0);
-                                    GameModel.currentLocale.RemoveItem(GameModel.currentLocale, "Owlett_Monster", 0);
+                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Sword", 0f);
+                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Gold", 0f);
+                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Owlett_Monster", 0f);
                                     GameModel.currentIntObj.SetActive(false);
                                     GameModel.currentIntObj = null;
                                 }

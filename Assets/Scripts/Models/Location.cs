@@ -44,27 +44,12 @@ public class Location
     public float SEntryY { get => sEntryY; set => sEntryY = value; }
     public float EEntryY { get => eEntryY; set => eEntryY = value; }
     public float WEntryY { get => wEntryY; set => wEntryY = value; }
-    //public int Item1Id { get; set; }
-    public string Item1Name { get => item1Name; set => item1Name = value; }
-    public float Item1PositionX { get => item1PositionX; set => item1PositionX = value; }
-    public float Item1PositionY { get => item1PositionY; set => item1PositionY = value; }
-    //public Sprite Item1Icon { get => item1Icon; set => item1Icon = value; }
-    public string Item2Name { get => item2Name; set => item2Name = value; }
-    public float Item2PositionX { get => item2PositionX; set => item2PositionX = value; }
-    public float Item2PositionY { get => item2PositionY; set => item2PositionY = value; }
-    //public Sprite Item2Icon { get => item2Icon; set => item2Icon = value; }
-    public string Item3Name { get => item3Name; set => item3Name = value; }
-    public float Item3PositionX { get => item3PositionX; set => item3PositionX = value; }
-    public float Item3PositionY { get => item3PositionY; set => item3PositionY = value; }
-    //public Sprite Item3Icon { get => item3Icon; set => item3Icon = value; }
 
     public void addLocation(string pDirection ,string pName, string pStory, float pNEntryX, float pNEntryY, float pSEntryX, float pSEntryY, float pWEntryX, float pWEntryY, float pEEntryX, float pEEntryY)
     {
 
         Location newLocation = GameModel.ds.storeNewLocation(pName, pStory, pNEntryX, pNEntryY, pSEntryX, pSEntryY, pWEntryX, pWEntryY, pEEntryX, pEEntryY);
         addDirection(pDirection, newLocation);
-
-
     }
     public void addDirection(string pDirection, Location toLocation)
     {
@@ -93,15 +78,15 @@ public class Location
         return thisLocation;
     }
 
-    public void AddItem(Location pLocationName, string pItemName, float pPositionX, float pPositionY)
-    {
-        GameModel.ds.AddItem(pLocationName, pItemName, pPositionX, pPositionY);
-    }
+    //public void AddItem(Location pLocationName, string pItemName, float pPositionX, float pPositionY)
+    //{
+    //    GameModel.ds.AddItem(pLocationName, pItemName, pPositionX, pPositionY);
+    //}
 
-    public void RemoveItem(Location pLocationName, string pItemName, float pPositionX)
-    {
-        GameModel.ds.RemoveItem(pLocationName, pItemName, pPositionX);
-    }
+    //public void RemoveItem(Location pLocationName, string pItemName, float pPositionX)
+    //{
+    //    GameModel.ds.RemoveItem(pLocationName, pItemName, pPositionX);
+    //}
 
     //public Vector3 GetItem(string pName)
     //{

@@ -126,19 +126,18 @@ public class DataService  {
             NEntryY = 00000000000000000000,
             SEntryY = 00000000000000000000,
             WEntryY = 00000000000000000000,
-            EEntryY  = 00000000000000000000,
-            Item1Name = "UUUUUUUUUUUUUUUUUUUU",
-            Item1PositionX = 00000000000000000000,
-            Item1PositionY = 00000000000000000000,
-            Item2Name = "UUUUUUUUUUUUUUUUUUUU",
-            Item2PositionX = 00000000000000000000,
-            Item2PositionY = 00000000000000000000,
-            Item3Name = "UUUUUUUUUUUUUUUUUUUU",
-            Item3PositionX = 00000000000000000000,
-            Item3PositionY = 00000000000000000000,
+            EEntryY  = 00000000000000000000
         }, jsnReceiverDel);
-        
 
+        GameModel.jsDrop.Create<Items, JsnReceiver>(new Items
+        {
+            PlayerName = "UUUUUUUUUUUUUUUUUUUUUUUUU",
+            Name = "UUUUUUUUUUUUUUUU",
+            Icon = "UUUUUUUUUUUUUUUU",
+            LocationID = 0,
+            PositionX = 000000,
+            PositionY = 000000
+        }, jsnReceiverDel);
     }
 
     public void jsnReceiverDel(JsnReceiver pReceived)
@@ -147,7 +146,7 @@ public class DataService  {
         // To do: parse and produce an appropriate response
     }
 
-    public void jsnRegisterPlayer(List<Player> pReceivedList)
+    public void jsnStorePlayer(List<Player> pReceivedList)
     {
         GameModel.jsDrop.Store<Player, JsnReceiver>(pReceivedList, jsnReceiverDel);
     }
@@ -162,19 +161,47 @@ public class DataService  {
         Debug.Log("Received items " + pReceivedList.Count);
         foreach (Player lcReceived in pReceivedList)
         {
-            Debug.Log("Received {" + lcReceived.PlayerName + "," + lcReceived.Password + "," + lcReceived.Score.ToString() + lcReceived.LocationId.ToString() + "}");
+            Debug.Log("Received {" + lcReceived.PlayerName + "," + lcReceived.Password + "," + lcReceived.Score.ToString() + "," + lcReceived.LocationId.ToString() + "}");
         
         }// for
 
         // To do: produce an appropriate response
     }
 
+    public void jsnGetPlayerLocations(List<int> pReceivedLocations)
+    {
+        GameModel.jsDrop.Select<Player, JsnReceiver>("LocationId = '" + 0 + "'", GameModel.gameMap.jsnPlayerLocationListReceiverDel, jsnReceiverDel);
+        GameModel.jsDrop.Select<Player, JsnReceiver>("LocationId = '" + 1 + "'", GameModel.gameMap.jsnPlayerLocationListReceiverDel, jsnReceiverDel);
+        GameModel.jsDrop.Select<Player, JsnReceiver>("LocationId = '" + 2 + "'", GameModel.gameMap.jsnPlayerLocationListReceiverDel, jsnReceiverDel);
+        GameModel.jsDrop.Select<Player, JsnReceiver>("LocationId = '" + 3 + "'", GameModel.gameMap.jsnPlayerLocationListReceiverDel, jsnReceiverDel);
+        GameModel.jsDrop.Select<Player, JsnReceiver>("LocationId = '" + 4 + "'", GameModel.gameMap.jsnPlayerLocationListReceiverDel, jsnReceiverDel);
+        GameModel.jsDrop.Select<Player, JsnReceiver>("LocationId = '" + 5 + "'", GameModel.gameMap.jsnPlayerLocationListReceiverDel, jsnReceiverDel);
+        GameModel.jsDrop.Select<Player, JsnReceiver>("LocationId = '" + 6 + "'", GameModel.gameMap.jsnPlayerLocationListReceiverDel, jsnReceiverDel);
+    }
 
     public void jsnLocationListReceiverDel(List<Location> pReceivedList)
         {
             _connection.DeleteAll<Location>();
             _connection.InsertAll(pReceivedList);
         }
+
+    public void jsnGetLocationItems(List<Items> pReceivedList)
+    {
+        GameModel.jsDrop.Select<Items, JsnReceiver>("PlayerName = '" + pReceivedList[0].PlayerName + "' && LocationId = '" + pReceivedList[0].LocationID + "'", jsnPlayerLocationItemsReceiverDel, jsnReceiverDel);
+        
+    }
+
+    public void jsnPlayerLocationItemsReceiverDel(List<Items> pReceivedList)
+    {
+        Debug.Log("Received items " + pReceivedList.Count);
+        foreach (Items lcReceived in pReceivedList)
+        {
+            Debug.Log("Received {" + lcReceived.PlayerName + "," + lcReceived.LocationID.ToString() + "," + lcReceived.Name + "," + lcReceived.PositionX + "}");
+
+        }// for
+
+        // To do: produce an appropriate response
+    }
 
     // Locations and their relationships 
     public IEnumerable<Location> GetLocations()
@@ -206,6 +233,10 @@ public class DataService  {
     public void updatePlayerLocation(Player pPlayer)
     {
         _connection.InsertOrReplace(pPlayer);
+        List<Player> PlayerList = new List<Player>();
+        PlayerList.Add(GameModel.cPlayer);
+        jsnStorePlayer(PlayerList);
+
     }
 
     public Location getGameExist()
@@ -273,54 +304,6 @@ public class DataService  {
         return _connection.Table<Player>().Where(x => x.PlayerName == pPlayerName).FirstOrDefault();
     }
 
-    //Items
-    public Location AddItem(Location pLocation, string pItemName, float pPositionX, float pPositionY)
-    {
-        if (pLocation.Item1Name == null)
-        {
-            pLocation.Item1Name = pItemName;
-            pLocation.Item1PositionX = pPositionX;
-            pLocation.Item1PositionY = pPositionY;
-        }
-        else if (pLocation.Item2Name == null)
-        {
-            pLocation.Item2Name = pItemName;
-            pLocation.Item2PositionX = pPositionX;
-            pLocation.Item2PositionY = pPositionY;
-        }
-        else if (pLocation.Item3Name == null)
-        {
-            pLocation.Item3Name = pItemName;
-            pLocation.Item3PositionX = pPositionX;
-            pLocation.Item3PositionY = pPositionY;
-        }
-        _connection.Update(pLocation);
-        return pLocation;
-         
-    }
-    public Location RemoveItem(Location pLocation, string pItemName, float pItemPositionX)
-    {
-        if (pLocation.Item1Name == pItemName && pLocation.Item1PositionX == pItemPositionX)
-        {
-            pLocation.Item1Name = null;
-            pLocation.Item1PositionX = 0;
-            pLocation.Item1PositionY = 0;
-        }
-        else if (pLocation.Item2Name == pItemName && pLocation.Item2PositionX == pItemPositionX)
-        {
-            pLocation.Item2Name = null;
-            pLocation.Item2PositionX = 0;
-            pLocation.Item2PositionY = 0;
-        }
-        else if (pLocation.Item3Name == pItemName && pLocation.Item3PositionX == pItemPositionX)
-        {
-            pLocation.Item3Name = null;
-            pLocation.Item3PositionX = 0;
-            pLocation.Item3PositionY = 0;
-        }
-        _connection.Update(pLocation);
-        return pLocation;
-    }
 
     public void AddPlayerItem(Player pPlayer, Location pLocation, string pItemName)
     {
@@ -331,4 +314,60 @@ public class DataService  {
         _connection.Insert(newItem);
     }
 
+    public void AddPlayerItems(Player pPlayer)
+    {
+        List<Items> newItemList = new List<Items>();
+        Items item = new Items
+        {
+            PlayerName = pPlayer.PlayerName,
+            LocationID = 0,
+            Name = "Coin",
+            Icon = "Coin",
+            PositionX = -1f,
+            PositionY = 0f
+        };
+        item.addItem(pPlayer.PlayerName, 0, "Rune", "Rune", 0f, 1f);
+        item.addItem(pPlayer.PlayerName, 0, "Sword", "Sword", 0f, 2f);
+        item.addItem(pPlayer.PlayerName, 0, "Owlett_Monster", "Owlett_Monster", 0f, 3f);
+        item.addItem(pPlayer.PlayerName, 1, "Chest", "Chest", 0f, 1f);
+        item.addItem(pPlayer.PlayerName, 1, "Coin", "Coin", 0f, 2f);
+        item.addItem(pPlayer.PlayerName, 2, "Coin", "Coin", 0f, 1f);
+        item.addItem(pPlayer.PlayerName, 3, "Key", "Key", 0f, 1f);
+        item.addItem(pPlayer.PlayerName, 4, "Coin", "Coin", 0f, 1f);
+        item.addItem(pPlayer.PlayerName, 5, "Rune", "Rune", 0f, 1f);
+        item.addItem(pPlayer.PlayerName, 6, "Chest", "Chest", 0f, 1f);
+        item.addItem(pPlayer.PlayerName, 6, "Chest", "Chest", 0f, 2f);
+        item.addItem(pPlayer.PlayerName, 6, "Key", "Key", 0f, 3f);
+
     }
+
+    public Items storeNewPlayerItems(string pPlayerName, int pLocationID, string pItemName, string pIcon, float pPositionX, float pPositionY)
+    {
+        Items newItem = new Items
+        {
+            PlayerName = pPlayerName,
+            LocationID = pLocationID,
+            Name = pItemName,
+            Icon = pIcon,
+            PositionX = pPositionX,
+            PositionY = pPositionY
+        };
+        _connection.Insert(newItem); // Store the item
+        return newItem;  // return the item
+    }
+
+    
+
+    public void Removeitem(string pPlayerName, int pLocationID, string pItemName, float pPositionX)
+    {
+        Items item = GetItem(pPlayerName, pLocationID, pItemName, pPositionX);
+        item.Picked = true;
+        _connection.InsertOrReplace(item);
+    }
+
+    public Items GetItem(string pPlayerName, int pLocationID, string pItemName, float pPositionX)
+    { 
+        return _connection.Table<Items>().Where(x => x.PlayerName == pPlayerName && x.LocationID == pLocationID && x.Name == pItemName && x.PositionX == pPositionX).FirstOrDefault();
+    }
+
+}
