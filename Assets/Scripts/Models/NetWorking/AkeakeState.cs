@@ -19,7 +19,7 @@ public static class AkeakeState
         }
     }
     static public int Rotation { get; set; }
-    public static DataService DB = new DataService("Cafe.db");
+    public static DataService DB = new DataService("VexedText2.db");
 
    
 
