@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LoadLevel : MonoBehaviour
 { 
@@ -12,6 +13,7 @@ public class LoadLevel : MonoBehaviour
         parentLocation = GameObject.Find("Locations");
         parentLocation.GetComponentsInChildren<Transform>(true);
         locations = parentLocation.GetComponentsInChildren<Transform>(true);
+        GameModel.storyNarrative = GameObject.Find("StoryNarrative").GetComponent<Text>();
     }
 
     // Is called when a player changes location to load/unload the correct assets.
@@ -32,13 +34,15 @@ public class LoadLevel : MonoBehaviour
                         GameModel.currentPlayer.GetComponent<Transform>().position = new Vector3(GameModel.currentLocale.WEntryX, GameModel.currentLocale.WEntryY, 0f);
                     else if (GameModel.nextLocation == "West")
                         GameModel.currentPlayer.GetComponent<Transform>().position = new Vector3(GameModel.currentLocale.EEntryX, GameModel.currentLocale.EEntryY, 0f);
+                    //unloads the items from the previous scene
+                    SpawnItems.UnloadGameObjects();
                     //sets the next locations assets to be active
                     locations[i].gameObject.SetActive(true);
                     //sets the current locations assets to inactive
                     GameObject.Find(GameModel.currentLocale.Name).SetActive(false);
                     // Failsafe to tell the game that a scene has changed
                     GameModel.sceneChanged = false;
-                    SpawnItems.DestroyGameObjects();
+                    
                     GameModel.currentLocale = GameModel.nextLocale;
                     GameModel.cPlayer.LocationId = GameModel.currentLocale.Id;
                     GameModel.ds.updatePlayerLocation(GameModel.cPlayer);
@@ -60,7 +64,6 @@ public class LoadLevel : MonoBehaviour
         parentLocation = GameObject.Find("Locations");
         parentLocation.GetComponentsInChildren<Transform>(true);
         locations = parentLocation.GetComponentsInChildren<Transform>(true);
-        List<Items> itemList = GameModel.ds.GetLocationItems(GameModel.currentLocale, GameModel.cPlayer);
         GameModel.currentPlayer = GameObject.Find("Player");
         // Loops through the locations transform array 
         for (int i = 0; i < locations.Length; i++)
@@ -72,6 +75,8 @@ public class LoadLevel : MonoBehaviour
                 locations[i].gameObject.SetActive(true);
             }
         }
+        SpawnItems.LoadGameObjects();
+
     }
     
 }

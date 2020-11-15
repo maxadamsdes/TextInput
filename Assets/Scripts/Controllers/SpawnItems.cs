@@ -6,27 +6,36 @@ public class SpawnItems : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LoadGameObjects();
     }
     public static void LoadGameObjects()
     {
-        foreach (KeyValuePair<string, Vector3> entry in GameModel.locationItems.Items)
+        List<Items> locationItems = GameModel.ds.GetLocationItems(GameModel.cPlayer);
+        foreach (Items item in locationItems)
         {
-            if (GameModel.currentLocale.Name == entry.Key)
+            Vector3 itemPosition = new Vector3(item.PositionX, item.PositionY, 0);
+            Object newItem = Instantiate(Resources.Load("ItemPrefabs/" + item.Name), itemPosition, Quaternion.identity);
+            Debug.Log("Loaded " + item.Name);
+        }
+        locationItems = null;
+    }
+    public static void UnloadGameObjects()
+    {
+        List<Items> locationItems = GameModel.ds.GetLocationItems(GameModel.cPlayer);
+        foreach (Items item in locationItems)
+        {
+            try
             {
-                Object newObject = Instantiate(Resources.Load("ItemPrefabs/" + entry.Key), entry.Value, Quaternion.identity);
-                newObject.name = entry.Key;
+                Destroy(GameObject.Find(item.Name + "(Clone)"));
+                Debug.Log("Unloaded " + item.Name);
+            }
+            catch
+            {
+                Debug.Log("Already unloaded " + item.Name);
             }
             
         }
+        locationItems = null;
     }
 
-    public static void DestroyGameObjects()
-    {
-        foreach (KeyValuePair<string, Vector3> entry in GameModel.locationItems.Items)
-        {
-            GameObject.Find(entry.Key).SetActive(false);
-        }
-    }
 
 }

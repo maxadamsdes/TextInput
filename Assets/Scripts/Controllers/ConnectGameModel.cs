@@ -34,6 +34,9 @@ public class ConnectGameModel : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         if (scene.name == "Game")
         {
+            List<Player> player = new List<Player>();
+            player.Add(GameModel.cPlayer);
+            GameModel.ds.jsnGetPlayerLocationItems(player);
             GameModel.m_OrthographicCamera = m_OrthographicCamera;
             GameModel.joysticks = joysticks;
             GameModel.menuButton = menuButton;

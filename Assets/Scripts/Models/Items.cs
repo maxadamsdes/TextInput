@@ -14,12 +14,12 @@ public class Items
     public string Icon { get; set; }
     public float PositionX { get; set; }
     public float PositionY { get; set; }
-    public bool Picked { get; set; }
+    public int Picked { get; set; }
 
 
-    public void addItem(string pPlayerName, int pLocationID, string pItemName, string pIcon, float pPositionX, float pPositionY)
+    public void addItem(string pPlayerName, int pLocationID, string pItemName, string pIcon, float pPositionX, float pPositionY, int pPicked)
     {
-        Items newItem = GameModel.ds.storeNewPlayerItems(pPlayerName, pLocationID, pItemName, pIcon, pPositionX, pPositionY);
+        Items newItem = GameModel.ds.storeNewPlayerItems(pPlayerName, pLocationID, pItemName, pIcon, pPositionX, pPositionY, pPicked);
         
     }
 
