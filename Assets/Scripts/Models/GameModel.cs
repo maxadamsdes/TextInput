@@ -79,7 +79,7 @@ public static class GameModel
     public static Player cPlayer = null;
     public static Location startLocation;
     public static DataService ds = new DataService("VexedText.db");
-    public static Map gameMap = new Map();
+    public static Map gameMap;
 
     // enum type for value that is one of these.
     // Here enum is being used to determine 
@@ -121,7 +121,7 @@ public static class GameModel
 
     public static void RegisterPlayer(string pName, string pPassword)
     {
-        cPlayer = ds.storeNewPlayer(pName, pPassword, 0, 0);
+        cPlayer = ds.storeNewPlayer(pName, pPassword, "Forest", 0);
         currentLocale = ds.GetPlayerLocation(cPlayer);
         List<Player> PlayerList = new List<Player>();
         PlayerList.Add(cPlayer);
@@ -142,7 +142,7 @@ public static class GameModel
             SEntryY = -1.6f,
             EEntryX = 23f,
             EEntryY = 0.2f,
-            WEntryX = 0f,
+            WEntryX = -3.28f,
             WEntryY = -1.6f,
         };
 
@@ -201,9 +201,15 @@ public static class GameModel
 
     }
 
-    public static void AddItem(Location pLocation, Player pPlayer, string pItemName)
+    public static void AddItem(Location pLocation, Player pPlayer, string pItemName, float pPositionX)
     {
-        ds.AddPlayerItem(pPlayer, pLocation, pItemName);
+        Items newItem = new Items();
+        newItem = ds.GetItem(pPlayer.PlayerName, pLocation.Name, pItemName, pPositionX);
+        newItem.Picked = 1;
+        ds.PickupItem(newItem);
+        List<Items> newItemList = new List<Items>();
+        newItemList.Add(newItem);
+        ds.jsnUpdateItems(newItemList);
 
         // Find first open slot in inventory
         //for (int i = 0; i < inventory.Count; i++)
@@ -227,20 +233,32 @@ public static class GameModel
 
     public static void LoadInventoryItems()
     {
-        for (int i = 0; i < inventory.Count; i++)
+        List<Items> inventory = new List<Items>();
+        inventory = ds.GetInventory(GameModel.cPlayer);
+        int x = 1;
+        foreach(Items i in inventory)
         {
-            if (inventory[i].Id != 0)
-            {
-                invText = GameObject.Find("ItemText" + (Convert.ToString(i + 1))).GetComponent<Text>();
-                invText.text = inventory[i].Name;
-                GameObject invItemImage = GameObject.Find("ItemImage" + (Convert.ToString(i + 1)));
-                invItemImage.GetComponent<Image>().sprite = Resources.Load("ItemPrefabs/" + inventory[i].Name) as Sprite;
-            }
-            else
-            {
-                break;
-            }
+            Debug.Log("inventory item is " + i.Name);
+            invText = GameObject.Find("ItemText" + (Convert.ToString(x))).GetComponent<Text>();
+            invText.text = i.Name;
+            GameObject invItemImage = GameObject.Find("ItemImage" + (Convert.ToString(x)));
+            invItemImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("InvItems/" + i.Name);
+            x += 1;
         }
+        //for (int i = 0; i < inventory.Count; i++)
+        //{
+        //    if (inventory[i].Id != 0)
+        //    {
+        //        invText = GameObject.Find("ItemText" + (Convert.ToString(i + 1))).GetComponent<Text>();
+        //        invText.text = inventory[i].Name;
+        //        GameObject invItemImage = GameObject.Find("ItemImage" + (Convert.ToString(i + 1)));
+        //        invItemImage.GetComponent<Image>().sprite = Resources.Load("ItemPrefabs/" + inventory[i].Name) as Sprite;
+        //    }
+        //    else
+        //    {
+        //        break;
+        //    }
+        //}
     }
 
     public static void UpdateDisplay()

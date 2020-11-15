@@ -6,7 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData
 {
-    public int locationId;
+    public string locationId;
     public int health;
     public float[] position;
     public int score;

@@ -11,7 +11,7 @@ public class MenuController : MonoBehaviour
     public GameObject audioOffIcon;
     public string itemName;
     public string itemTag;
-    private bool isShowing = false;
+    private bool isShowing;
     float m_ViewPositionX, m_ViewPositionY;
     bool exit;
 

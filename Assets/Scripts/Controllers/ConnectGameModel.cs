@@ -45,6 +45,7 @@ public class ConnectGameModel : MonoBehaviour
             GameModel.storyHead = storyHead;
             GameModel.storyNarrative = storyNarrative;
             GameModel.currentPlayer = GameObject.Find("Player");
+
             GameModel.loadLevel.StartLocation();
         }
         

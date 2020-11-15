@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LoadInv : MonoBehaviour
 {
-    void Awake()
+    void Start()
     {
         GameModel.LoadInventoryItems();
     }

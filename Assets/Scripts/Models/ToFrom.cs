@@ -7,8 +7,8 @@ public class ToFrom
 {
     [PrimaryKey, AutoIncrement]
     public int ID { get; set; }
-    public int ToID { get; set; }
-    public int FromID { get; set; }
+    public string ToID { get; set; }
+    public string FromID { get; set; }
     public string Direction { get; set; }
 }
 

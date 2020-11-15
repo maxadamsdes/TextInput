@@ -32,8 +32,7 @@ public class Location
     private float item3PositionY;
     //private Sprite item3Icon;
 
-    [PrimaryKey, AutoIncrement]
-    public int Id { get => id; set => id = value; }
+    [PrimaryKey]
     public string Name { get => name; set => name = value; }
     public string Story { get => story; set => story = value; }
     public float NEntryX { get => nEntryX; set => nEntryX = value; }
@@ -53,7 +52,7 @@ public class Location
     }
     public void addDirection(string pDirection, Location toLocation)
     {
-        GameModel.ds.storeFromTo(Id, toLocation.Id, pDirection);
+        GameModel.ds.storeFromTo(Name, toLocation.Name, pDirection);
     }
 
     public  void addLocation(string pDirection, Location pLocation)
@@ -71,7 +70,7 @@ public class Location
         //    Debug.Log(" Bad location");
         //}
 
-        ToFrom tf = GameModel.ds.GetToFrom(Id, pDirection);
+        ToFrom tf = GameModel.ds.GetToFrom(Name, pDirection);
         if (tf != null)
             thisLocation = GameModel.ds.GetLocation(tf.ToID);
         

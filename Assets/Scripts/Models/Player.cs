@@ -10,13 +10,13 @@ public class Player
     
     private string playerName;
     private string password;
-    private int locationId;
+    private string locationId;
     //private int health;
     private int score;
     [PrimaryKey]
     public string PlayerName { get => playerName; set => playerName = value; }
     public string Password { get => password; set => password = value; }
-    public int LocationId { get => locationId; set => locationId = value; }
+    public string LocationId { get => locationId; set => locationId = value; }
     //public int Health { get => health; set => health = value; }
     public int Score { get => score; set => score = value; }
    

@@ -36,22 +36,14 @@ public class CommandProcessor
                             if ((GameModel.currentIntObj.tag == "Item") && (GameModel.pickUpAble == true))
                             {
 
-                                GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, GameModel.currentIntObj.name);
-                                if (GameModel.itemAdded != true)
-                                {
-                                    Debug.Log("Not enough space!");
-                                    strResult = "You dont have enough space for " + GameModel.currentIntObj.name + "!";
-                                }
-                                else
-                                {
-                                    Debug.Log(GameModel.currentIntObj.name + " added to Inventory");
-                                    strResult = GameModel.currentIntObj.name + " added to Inventory";
-                                    storyNarrative.GetComponent<Text>().text = "Sweet as";
-                                    GameModel.DestroyGameObject(GameModel.currentIntObj);
-                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
-                                    GameModel.currentIntObj.SetActive(false);
-                                    GameModel.currentIntObj = null;
-                                }
+                                GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                Debug.Log(GameModel.currentIntObj.name + " added to Inventory");
+                                strResult = GameModel.currentIntObj.name + " added to Inventory";
+                                storyNarrative.GetComponent<Text>().text = "Sweet as";
+                                GameModel.DestroyGameObject(GameModel.currentIntObj);
+                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                GameModel.currentIntObj.SetActive(false);
+                                GameModel.currentIntObj = null;
 
                             }
                             else
@@ -191,22 +183,14 @@ public class CommandProcessor
                                 var randomint = rand.Next(GameModel.items.Count);
                                 var randomItem = GameModel.items[randomint];
                                 GameModel.itemToAdd = randomint;
-                                GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, GameModel.currentIntObj.name);
-                                if (GameModel.itemAdded != true)
-                                {
-                                    Debug.Log("Not enough space!");
-                                    strResult = "You dont have enough space for " + randomItem.Name + "!";
-                                }
-                                else
-                                {
-                                    Debug.Log(randomItem.Name + " added to Inventory");
-                                    strResult = (randomItem.Name + " added to Inventory");
-                                    storyNarrative.GetComponent<Text>().text = "Nice find!";
-                                    anim.SetBool("Looted", true);
-                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
-                                    GameModel.currentIntObj.GetComponent<Collider2D>().enabled = false;
-                                    GameModel.currentIntObj = null;
-                                }
+                                GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                Debug.Log(randomItem.Name + " added to Inventory");
+                                strResult = (randomItem.Name + " added to Inventory");
+                                storyNarrative.GetComponent<Text>().text = "Nice find!";
+                                anim.SetBool("Looted", true);
+                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                GameModel.currentIntObj.GetComponent<Collider2D>().enabled = false;
+                                GameModel.currentIntObj = null;
                             }
                             else
                             {
@@ -233,7 +217,7 @@ public class CommandProcessor
                                         try
                                         {
                                             GameModel.itemToAdd = 4;
-                                            GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword");
+                                            GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword", GameModel.currentIntObj.GetComponent<Transform>().position.x);
                                             if (GameModel.itemAdded != true)
                                             {
                                                 Debug.Log("Not enough space!");
@@ -244,8 +228,8 @@ public class CommandProcessor
                                                 Debug.Log("Got take Sword");
                                                 strResult = "Taken the sword!";
                                                 storyNarrative.GetComponent<Text>().text = "All power to you";
-                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Sword", 0f);
-                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Gold", 0f);
+                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Sword", 0f);
+                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Gold", 0f);
                                                 GameObject.Find("Sword").SetActive(false);
                                                 GameObject.Find("Gold").SetActive(false);
                                             }
@@ -281,7 +265,7 @@ public class CommandProcessor
                                         try
                                         {
                                             GameModel.itemToAdd = 1;
-                                            GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold");
+                                            GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold", GameModel.currentIntObj.GetComponent<Transform>().position.x);
                                             if (GameModel.itemAdded != true)
                                             {
                                                 Debug.Log("Not enough space!");
@@ -292,8 +276,8 @@ public class CommandProcessor
                                                 Debug.Log("Got take Gold");
                                                 strResult = "Taken the Gold!";
                                                 storyNarrative.GetComponent<Text>().text = "A wise choice.";
-                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Sword", 0f);
-                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Gold", 0f);
+                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Sword", 0f);
+                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Gold", 0f);
                                                 GameObject.Find("Sword").SetActive(false);
                                                 GameObject.Find("Gold").SetActive(false);
                                             }
@@ -339,7 +323,7 @@ public class CommandProcessor
                                 if (!randomBool)
                                 {
                                     GameModel.itemToAdd = 3;
-                                    GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword");
+                                    GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword", GameModel.currentIntObj.GetComponent<Transform>().position.x);
                                     if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");
@@ -347,12 +331,12 @@ public class CommandProcessor
                                     }
                                     else
                                     {
-                                        GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Sword", 0f);
+                                        GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Sword", 0f);
                                         GameObject.Find("Sword").SetActive(false);
                                     }
 
                                     GameModel.itemToAdd = 0;
-                                    GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold");
+                                    GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold", GameModel.currentIntObj.GetComponent<Transform>().position.x);
                                     if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");
@@ -360,7 +344,7 @@ public class CommandProcessor
                                     }
                                     else
                                     {
-                                        GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Gold", 0f);
+                                        GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Gold", 0f);
                                         GameObject.Find("Gold").SetActive(false);
                                     }
 
@@ -380,9 +364,9 @@ public class CommandProcessor
                                     strResult = "You were caught!";
                                     storyNarrative.GetComponent<Text>().text = "Naughty, naughty... Bye!";
                                     GameModel.currentIntObj.GetComponent<Text>().Equals("");
-                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Sword", 0f);
-                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Gold", 0f);
-                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Id, "Owlett_Monster", 0f);
+                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Sword", 0f);
+                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Gold", 0f);
+                                    GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Owlett_Monster", 0f);
                                     GameModel.currentIntObj.SetActive(false);
                                     GameModel.currentIntObj = null;
                                 }

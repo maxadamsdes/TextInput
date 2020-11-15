@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadLevel : MonoBehaviour
+public class LoadLevel
 { 
     public Transform[] locations;
     public GameObject parentLocation;
@@ -44,7 +44,7 @@ public class LoadLevel : MonoBehaviour
                     GameModel.sceneChanged = false;
                     
                     GameModel.currentLocale = GameModel.nextLocale;
-                    GameModel.cPlayer.LocationId = GameModel.currentLocale.Id;
+                    GameModel.cPlayer.LocationId = GameModel.currentLocale.Name;
                     GameModel.ds.updatePlayerLocation(GameModel.cPlayer);
                     SpawnItems.LoadGameObjects();
                     GameModel.menuController.exitText();

@@ -23,25 +23,25 @@ public class Map : MonoBehaviour
         
         switch(p.LocationId)
         {
-            case 0:
+            case "Forest":
                 dropdown = GameObject.Find("DropdownForest").GetComponent<Dropdown>();
                 break;
-            case 1:
+            case "Cave":
                 dropdown = GameObject.Find("DropdownCave").GetComponent<Dropdown>();
                 break;
-            case 2:
+            case "Beach":
                 dropdown = GameObject.Find("DropdownBeach").GetComponent<Dropdown>();
                 break;
-            case 3:
+            case "Highway":
                 dropdown = GameObject.Find("DropdownHighway").GetComponent<Dropdown>();
                 break;
-            case 4:
+            case "Cave2":
                 dropdown = GameObject.Find("DropdownCave2").GetComponent<Dropdown>();
                 break;
-            case 5:
+            case "River":
                 dropdown = GameObject.Find("DropdownRiver").GetComponent<Dropdown>();
                 break;
-            case 6:
+            case "Ocean":
                 dropdown = GameObject.Find("DropdownOcean").GetComponent<Dropdown>();
                 break;
             default:

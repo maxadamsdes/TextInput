@@ -14,9 +14,9 @@ public class SpawnItems : MonoBehaviour
         {
             Vector3 itemPosition = new Vector3(item.PositionX, item.PositionY, 0);
             Object newItem = Instantiate(Resources.Load("ItemPrefabs/" + item.Name), itemPosition, Quaternion.identity);
+            newItem.name = item.Name;
             Debug.Log("Loaded " + item.Name);
         }
-        locationItems = null;
     }
     public static void UnloadGameObjects()
     {
@@ -25,7 +25,7 @@ public class SpawnItems : MonoBehaviour
         {
             try
             {
-                Destroy(GameObject.Find(item.Name + "(Clone)"));
+                Destroy(GameObject.Find(item.Name));
                 Debug.Log("Unloaded " + item.Name);
             }
             catch
@@ -34,7 +34,6 @@ public class SpawnItems : MonoBehaviour
             }
             
         }
-        locationItems = null;
     }
 
 
