@@ -25,15 +25,7 @@ public class LoadLevel
             {
                 if (locations[i].name == GameModel.nextLocale.Name)
                 {
-                    // Finds the direction the player is coming from to then change that players position to match the scene
-                    if (GameModel.nextLocation == "North")
-                        GameModel.currentPlayer.GetComponent<Transform>().position = new Vector3(GameModel.currentLocale.NEntryX, GameModel.currentLocale.NEntryY, 0f);
-                    else if (GameModel.nextLocation == "South")
-                        GameModel.currentPlayer.GetComponent<Transform>().position = new Vector3(GameModel.currentLocale.SEntryX, GameModel.currentLocale.SEntryY, 0f);
-                    else if (GameModel.nextLocation == "East")
-                        GameModel.currentPlayer.GetComponent<Transform>().position = new Vector3(GameModel.currentLocale.WEntryX, GameModel.currentLocale.WEntryY, 0f);
-                    else if (GameModel.nextLocation == "West")
-                        GameModel.currentPlayer.GetComponent<Transform>().position = new Vector3(GameModel.currentLocale.EEntryX, GameModel.currentLocale.EEntryY, 0f);
+                    
                     //unloads the items from the previous scene
                     SpawnItems.UnloadGameObjects();
                     //sets the next locations assets to be active
@@ -42,10 +34,10 @@ public class LoadLevel
                     GameObject.Find(GameModel.currentLocale.Name).SetActive(false);
                     // Failsafe to tell the game that a scene has changed
                     GameModel.sceneChanged = false;
-                    
                     GameModel.currentLocale = GameModel.nextLocale;
                     GameModel.cPlayer.LocationId = GameModel.currentLocale.Name;
-                    GameModel.ds.updatePlayerLocation(GameModel.cPlayer);
+                    GameModel.ds.updatePlayer(GameModel.cPlayer);
+                    PlayerSpawn(GameModel.currentPlayer);
                     SpawnItems.LoadGameObjects();
                     GameModel.menuController.exitText();
                     break;
@@ -57,6 +49,36 @@ public class LoadLevel
             GameModel.sceneChanged = true;
         }
         
+    }
+
+    private void PlayerSpawn(GameObject pPlayer)
+    {
+        GameObject spawn = new GameObject();
+        // Finds the direction the player is coming from to then change that players position to match the scene
+        if (GameModel.nextLocation == "North")
+        {
+            spawn = GameObject.Find("South");
+            pPlayer.GetComponent<Transform>().position = spawn.GetComponent<Transform>().position;
+            //GameModel.currentPlayer.GetComponent<Transform>().localPosition = new Vector3(GameModel.currentLocale.NEntryX, GameModel.currentLocale.NEntryY, 0f);
+        }
+        else if (GameModel.nextLocation == "South")
+        {
+            spawn = GameObject.Find("North");
+            pPlayer.GetComponent<Transform>().position = spawn.GetComponent<Transform>().position;
+            //GameModel.currentPlayer.GetComponent<Transform>().localPosition = new Vector3(GameModel.currentLocale.SEntryX, GameModel.currentLocale.SEntryY, 0f);
+        }
+        else if (GameModel.nextLocation == "East")
+        {
+            spawn = GameObject.Find("West");
+            pPlayer.GetComponent<Transform>().position = spawn.GetComponent<Transform>().position;
+            //GameModel.currentPlayer.GetComponent<Transform>().localPosition = new Vector3(GameModel.currentLocale.WEntryX, GameModel.currentLocale.WEntryY, 0f);
+        }
+        else if (GameModel.nextLocation == "West")
+        {
+            spawn = GameObject.Find("East");
+            pPlayer.GetComponent<Transform>().position = spawn.GetComponent<Transform>().position;
+            //GameModel.currentPlayer.GetComponent<Transform>().localPosition = new Vector3(GameModel.currentLocale.EEntryX, GameModel.currentLocale.EEntryY, 0f);
+        }
     }
 
     public void StartLocation()

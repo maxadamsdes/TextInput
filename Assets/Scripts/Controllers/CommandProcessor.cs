@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class CommandProcessor
 {
@@ -36,7 +37,7 @@ public class CommandProcessor
                             if ((GameModel.currentIntObj.tag == "Item") && (GameModel.pickUpAble == true))
                             {
 
-                                GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                //GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
                                 Debug.Log(GameModel.currentIntObj.name + " added to Inventory");
                                 strResult = GameModel.currentIntObj.name + " added to Inventory";
                                 storyNarrative.GetComponent<Text>().text = "Sweet as";
@@ -144,11 +145,17 @@ public class CommandProcessor
                     catch
                     {
                         Debug.Log("Can't help lol");
-                    }  
+                    }
                     break;
 
                 case "enter":
-                    if ((parts.Length == 1) && (GameModel.currentIntObj.tag == "Entrance"))
+                    if ((parts.Length == 1) && (GameModel.currentIntObj.name == "house"))
+                    {
+                        strResult = "Congratulations!";
+                        SceneManagerScript change = new SceneManagerScript();
+                        change.LoadScoreBoard();
+                    }
+                    else if ((parts.Length == 1) && (GameModel.currentIntObj.tag == "Entrance"))
                     {
                         GameModel.nextLocale = GameModel.currentLocale.getLocation(GameModel.currentIntObj.name);
                         Debug.Log("Got go " + GameModel.currentIntObj.name);
@@ -164,26 +171,30 @@ public class CommandProcessor
                         }
                         strResult = GameModel.currentLocale.Name;
                     }
+                    
                     else if (parts.Length == 1)
                     {
                         Debug.Log("Not able to enter");
                         strResult = "There's nowhere to enter";
                     }
-                    
+
                     break;
-                    case "take":
+                case "take":
                     if (parts.Length == 1)
                     {
                         try
                         {
                             if (GameModel.currentIntObj.name == "Chest")
                             {
-                                //string[] itemOptions = { "CoinStatic", "KeyStatic", "RuneStatic" };
+                                
                                 var rand = new System.Random();
                                 var randomint = rand.Next(GameModel.items.Count);
                                 var randomItem = GameModel.items[randomint];
                                 GameModel.itemToAdd = randomint;
-                                GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, GameModel.currentIntObj.name, GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                Items newItem = GameModel.ds.storeNewPlayerItems(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, randomItem.Name, randomItem.Name, GameModel.currentIntObj.GetComponent<Transform>().position.x, GameModel.currentIntObj.GetComponent<Transform>().position.y, 1);
+                                List<Items> newItemList = new List<Items>();
+                                newItemList.Add(newItem);
+                                GameModel.ds.jsnUpdateItems(newItemList);
                                 Debug.Log(randomItem.Name + " added to Inventory");
                                 strResult = (randomItem.Name + " added to Inventory");
                                 storyNarrative.GetComponent<Text>().text = "Nice find!";
@@ -217,28 +228,20 @@ public class CommandProcessor
                                         try
                                         {
                                             GameModel.itemToAdd = 4;
-                                            GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword", GameModel.currentIntObj.GetComponent<Transform>().position.x);
-                                            if (GameModel.itemAdded != true)
-                                            {
-                                                Debug.Log("Not enough space!");
-                                                strResult = "You dont have enough space for the Sword!";
-                                            }
-                                            else
-                                            {
-                                                Debug.Log("Got take Sword");
-                                                strResult = "Taken the sword!";
-                                                storyNarrative.GetComponent<Text>().text = "All power to you";
-                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Sword", 0f);
-                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Gold", 0f);
-                                                GameObject.Find("Sword").SetActive(false);
-                                                GameObject.Find("Gold").SetActive(false);
-                                            }
+                                            //GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword", GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                            Debug.Log("Got take Sword");
+                                            strResult = "Taken the sword!";
+                                            storyNarrative.GetComponent<Text>().text = "All power to you";
+                                            GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Sword", 0f);
+                                            GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Gold", 0f);
+                                            GameObject.Find("Sword").SetActive(false);
+                                            GameObject.Find("Gold").SetActive(false);
                                         }
                                         catch
                                         {
                                             Debug.Log("Can't do that");
                                             strResult = "You've already chosen!";
-                                            
+
                                         }
 
                                     }
@@ -265,22 +268,14 @@ public class CommandProcessor
                                         try
                                         {
                                             GameModel.itemToAdd = 1;
-                                            GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold", GameModel.currentIntObj.GetComponent<Transform>().position.x);
-                                            if (GameModel.itemAdded != true)
-                                            {
-                                                Debug.Log("Not enough space!");
-                                                strResult = "You dont have enough space for the Gold!";
-                                            }
-                                            else
-                                            {
-                                                Debug.Log("Got take Gold");
-                                                strResult = "Taken the Gold!";
-                                                storyNarrative.GetComponent<Text>().text = "A wise choice.";
-                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Sword", 0f);
-                                                GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Gold", 0f);
-                                                GameObject.Find("Sword").SetActive(false);
-                                                GameObject.Find("Gold").SetActive(false);
-                                            }
+                                            //GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold", GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                            Debug.Log("Got take Gold");
+                                            strResult = "Taken the Gold!";
+                                            storyNarrative.GetComponent<Text>().text = "A wise choice.";
+                                            GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Sword", 0f);
+                                            GameModel.ds.Removeitem(GameModel.cPlayer.PlayerName, GameModel.currentLocale.Name, "Gold", 0f);
+                                            GameObject.Find("Sword").SetActive(false);
+                                            GameObject.Find("Gold").SetActive(false);
                                         }
                                         catch
                                         {
@@ -306,10 +301,54 @@ public class CommandProcessor
                                 Debug.Log("Not able to take");
                                 strResult = "You can't take " + parts[1] + "!";
                                 break;
+
                         }
                     }
-                   
-            
+                    break;
+                case "open":
+                    if (GameModel.currentIntObj.name == "Pink_Monster")
+                    {
+                        try
+                        {
+                            if (parts.Length == 1)
+                            {
+                                strResult = "Open what?";
+                            }
+                            else
+                            {
+                                switch(parts[1])
+                                {
+                                    case "door":
+                                        Items item1 = GameModel.ds.GetItemToGive(GameModel.cPlayer.PlayerName, "Rune");
+                                        Items item2 = GameModel.ds.GetItemToGive(GameModel.cPlayer.PlayerName, "Key");
+                                        Items door = GameModel.ds.GetItem(GameModel.cPlayer.PlayerName, "Forest", "Door", -4.0f);
+
+                                        if (item1.Name == "Rune" && item2.Name == "Key")
+                                        {
+                                            GameModel.ds.UseItem(item1, item1, door);
+                                            strResult = "Given " + item1.Name + " and " + item2.Name + " to the friendly creature.";
+                                            GameModel.currentIntObj.GetComponent<Text>().text = "Thankyou very much. I will have the door opened for you by the time you get there";
+                                        }
+                                        else
+                                        {
+                                            strResult = "You are missing something";
+                                        }
+                                        break;
+                                    default:
+                                        strResult = parts[1] + " is not an option to open.";
+                                    break;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            strResult = parts[1] + " failed";
+                        }
+                    }
+                    else
+                    {
+                        strResult = "Nothing able to be opened!";
+                    }
                     break;
                 case "steal":
                     try
@@ -323,7 +362,7 @@ public class CommandProcessor
                                 if (!randomBool)
                                 {
                                     GameModel.itemToAdd = 3;
-                                    GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword", GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                    //GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Sword", GameModel.currentIntObj.GetComponent<Transform>().position.x);
                                     if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");
@@ -336,7 +375,7 @@ public class CommandProcessor
                                     }
 
                                     GameModel.itemToAdd = 0;
-                                    GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold", GameModel.currentIntObj.GetComponent<Transform>().position.x);
+                                    //GameModel.AddItem(GameModel.currentLocale, GameModel.cPlayer, "Gold", GameModel.currentIntObj.GetComponent<Transform>().position.x);
                                     if (GameModel.itemAdded != true)
                                     {
                                         Debug.Log("Not enough space!");

@@ -31,6 +31,7 @@ using System.Reflection;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
+using UnityEngine;
 
 #if USE_CSHARP_SQLITE
 using Sqlite3 = Community.CsharpSqlite.Sqlite3;
@@ -133,7 +134,7 @@ namespace SQLite4Unity3d
 		private TimeSpan _elapsed = default(TimeSpan);
 
 		private int _transactionDepth = 0;
-		private Random _rand = new Random ();
+		private System.Random _rand = new System.Random ();
 
 		public Sqlite3DatabaseHandle Handle { get; private set; }
 		internal static readonly Sqlite3DatabaseHandle NullHandle = default(Sqlite3DatabaseHandle);
@@ -1488,6 +1489,7 @@ namespace SQLite4Unity3d
 				throw new NotSupportedException ("Cannot delete " + map.TableName + ": it has no PK");
 			}
 			var q = string.Format ("delete from \"{0}\" where \"{1}\" = ?", map.TableName, pk.Name);
+			
 			return Execute (q, pk.GetValue (objectToDelete));
 		}
 

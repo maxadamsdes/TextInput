@@ -39,6 +39,10 @@ public class PasswordRegController : MonoBehaviour
         {
             case GameModel.PasswdMode.OK:
                 HidePanels();
+                Player pPlayer = GameModel.ds.getPlayer(Playername.text);
+                List<Player> pPlayerList = new List<Player>();
+                pPlayerList.Add(pPlayer);
+                GameModel.ds.jsnGetPlayerLocationItems(pPlayerList);
                 SceneManager.LoadScene("Game");
                 break;
             case GameModel.PasswdMode.NeedName:
@@ -63,7 +67,7 @@ public class PasswordRegController : MonoBehaviour
     {
         RegPanel.SetActive(false);
         PasspromptPanel.SetActive(false);
-
+        GameModel.ds.jsnGetAllPlayers();
 
         //------------------------------------------------Only used for testing!!!!!!!!!!!!!!!!!------------------------------------------------
         //

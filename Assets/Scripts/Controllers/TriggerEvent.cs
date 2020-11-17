@@ -60,16 +60,23 @@ public class TriggerEvent : MonoBehaviour
             else
             {
                 GameModel.loadLevel.LoadLocation();
-                
             }
             failsafe = true;
         }
         else if (encounter.tag == "Entrance")
         {
-            GameModel.nextLocale = GameModel.currentLocale.getLocation(encounter.name);
             GameModel.currentIntObj = encounter.gameObject;
-            GameModel.nextLocation = encounter.name;
-            storyHead.text = "Type to 'enter' to go to " + GameModel.currentLocale.getLocation(GameModel.currentIntObj.name).Name;
+            if (encounter.name != "house")
+            {
+                GameModel.nextLocale = GameModel.currentLocale.getLocation(encounter.name);
+                GameModel.nextLocation = encounter.name;
+                storyHead.text = "Type to 'enter' to go to " + GameModel.currentLocale.getLocation(GameModel.currentIntObj.name).Name;
+            }
+            else
+            {
+                storyHead.text = "House";
+                storyNarrative.text = encounter.GetComponent<Text>().text;
+            }
         }
         else if (encounter.tag == "Respawn")
         {
@@ -91,7 +98,7 @@ public class TriggerEvent : MonoBehaviour
         else if (encounter.tag == "Sign")
         {
             GameModel.currentIntObj = encounter.gameObject;
-            storyHead.text = GameModel.currentIntObj.tag;
+            storyHead.text = GameModel.currentIntObj.name;
             storyNarrative.text = GameModel.currentIntObj.GetComponent<Text>().text;
         }
         else if (encounter.tag != "Entrance")

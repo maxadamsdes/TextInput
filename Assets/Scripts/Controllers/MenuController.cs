@@ -63,7 +63,8 @@ public class MenuController : MonoBehaviour
         GameModel.m_OrthographicCamera.orthographic = true;
         GameModel.m_OrthographicCamera.orthographicSize = 5.0f;
         GameModel.m_OrthographicCamera.transform.position += new Vector3(0, 5f, 0);
-        
+        GameModel.storyHead.text = GameModel.currentLocale.Name;
+        GameModel.storyNarrative.text = GameModel.currentLocale.Story;
     }
 
     // toggles the sound state to muted or on

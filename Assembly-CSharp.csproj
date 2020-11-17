@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\Controllers\ParallaxBackground.cs" />
     <Compile Include="Assets\Scripts\Controllers\PasswordRegController.cs" />
     <Compile Include="Assets\Scripts\Controllers\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Controllers\PopulateScoreBoard.cs" />
     <Compile Include="Assets\Scripts\Controllers\ReliableOnTriggerExit.cs" />
     <Compile Include="Assets\Scripts\Controllers\SaveAndRestorePosition.cs" />
     <Compile Include="Assets\Scripts\Controllers\SaveSystem.cs" />

@@ -12,8 +12,8 @@ public class Items
     public string LocationID { get; set; }
     public string Name { get; set; }
     public string Icon { get; set; }
-    public float PositionX { get; set; }
-    public float PositionY { get; set; }
+    public string PositionX { get; set; }
+    public string PositionY { get; set; }
     public int Picked { get; set; }
 
 

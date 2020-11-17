@@ -15,7 +15,7 @@ public class ConnectGameModel : MonoBehaviour
     public Camera m_OrthographicCamera;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         try
         {
@@ -34,6 +34,7 @@ public class ConnectGameModel : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         if (scene.name == "Game")
         {
+            //GameModel.ds.DropItems();
             List<Player> player = new List<Player>();
             player.Add(GameModel.cPlayer);
             GameModel.ds.jsnGetPlayerLocationItems(player);
@@ -45,7 +46,6 @@ public class ConnectGameModel : MonoBehaviour
             GameModel.storyHead = storyHead;
             GameModel.storyNarrative = storyNarrative;
             GameModel.currentPlayer = GameObject.Find("Player");
-
             GameModel.loadLevel.StartLocation();
         }
         

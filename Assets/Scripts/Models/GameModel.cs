@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 
 // Is this a factory?
@@ -32,6 +33,7 @@ public static class GameModel
     public static string nextLocation;
     public static int itemToAdd;
     public static bool sceneChanged = true;
+    public static bool finished;
     public static List<Items> items = new List<Items>() {
         new Items(){ Id = 1, Name="Coin" },
         new Items(){ Id = 2, Name="Rune" },
@@ -51,6 +53,7 @@ public static class GameModel
         new Items(){ Id = 0, Name="Empty" },
     };
     public static void DestroyGameObject(GameObject obj, float t = 0.0F) { }
+    public static bool DoorOpened = false;
     static String _name;
     public static string Name
     {
@@ -80,6 +83,7 @@ public static class GameModel
     public static Location startLocation;
     public static DataService ds = new DataService("VexedText.db");
     public static Map gameMap;
+    public static PopulateScoreBoard populateScoreBoard;
 
     // enum type for value that is one of these.
     // Here enum is being used to determine 
@@ -131,44 +135,36 @@ public static class GameModel
     public static void MakeGame()
     {
         GameModel.ds.CreateDB();
-        Location forest, cave, cave2, beach, river, highway, ocean;
+        Location forest, cave, cave2, beach, river, house, ocean;
         currentLocale = new Location
         {
             Name = "Forest",
-            Story = " Run!!",
-            NEntryX = 0f,
-            NEntryY = -1.6f,
-            SEntryX = 0f,
-            SEntryY = -1.6f,
-            EEntryX = 23f,
-            EEntryY = 0.2f,
-            WEntryX = -3.28f,
-            WEntryY = -1.6f,
+            Story = " This area seems rather pleasant. Who's that strange looking figure on that hill?"
         };
 
         // forest
         forest = currentLocale;
         GameModel.ds.storeLocation(forest);
-        forest.addLocation("North", "Cave", "Lava", 0f, -1.6f, 15.76392f, -0.8335584f, 0f, -1.6f, 0f, -1.6f); 
-        forest.addLocation("East", "Beach", "Sharks", 9f, 0.49f, 0f, 0f, 6.7f, -4.3f, 6.7f, -4.3f); 
-        forest.addLocation("West", "Highway", "Highwaymen!", 0f, 0f, 0f, 0f, -3.58f, -1.6f, 0f, 0f); 
+        forest.addLocation("North", "Cave", "Where's the entrance gone! It looks like I'll need to cross that lava lake!", 0f, -1.6f, 15.76392f, -0.8335584f, 0f, -1.6f, 0f, -1.6f); 
+        forest.addLocation("East", "Beach", "Huh, is that someone way over on the far side? I may or not not be able to reach them from here", 0f, 0.49f, 0f, 0f, 6.7f, -4.3f, 6.7f, -4.3f); 
+        forest.addLocation("West", "House", "Well. This is a boring looking area", 0f, 0f, 0f, 0f, -3.58f, -1f, 0f, 0f); 
 
         // cave
         cave = forest.getLocation("North");
         cave.addLocation("South", forest);
-        cave.addLocation("East", "Cave2", "Enemies?", 0f, 0f, 0f, 0f, 24.2f, 1.06f, 0f, -1.6f);
+        cave.addLocation("East", "Cave2", "Another lava lake... I think I can see light coming from the tunnel on the other side though!", 0f, 0f, 0f, 0f, 24.2f, 1.06f, 0f, -1.6f);
 
         // cave 2
         cave2 = cave.getLocation("East");
         cave2.addLocation("West", cave);
-        cave2.addLocation("East", "River", "Bridge", 0f, 0f, 0f, -1.6f, 0f, -1.6f, 24.36617f, 1.045399f); //
+        cave2.addLocation("East", "River", "This is much nicer, I wonder what that sign says though?", 0f, 0f, 0f, -1.6f, 0f, -1.6f, 24.36617f, 1.045399f); //
         river = cave2.getLocation("East");
 
 
         // beach
         beach = forest.getLocation("East");
         beach.addLocation("West", forest);
-        beach.addLocation("North", "Ocean", "I guess you're amphibious", 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+        beach.addLocation("North", "Ocean", "I guess you're amphibious! Surely there must be treasure hidden around here, but then how are you going to get out!", 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
         ocean = beach.getLocation("North");
 
         // river
@@ -179,9 +175,9 @@ public static class GameModel
         ocean.addLocation("North", river);
         ocean.addLocation("South", beach);
 
-        //Highway
-        highway = forest.getLocation("West");
-        highway.addLocation("East", forest);
+        //House
+        house = forest.getLocation("West");
+        house.addLocation("East", forest);
 
         //currentLocale = forest;
         nextLocale = currentLocale;
@@ -194,41 +190,11 @@ public static class GameModel
             beach,
             river,
             ocean,
-            highway
+            house
 
         }, ds.jsnReceiverDel);
 
 
-    }
-
-    public static void AddItem(Location pLocation, Player pPlayer, string pItemName, float pPositionX)
-    {
-        Items newItem = new Items();
-        newItem = ds.GetItem(pPlayer.PlayerName, pLocation.Name, pItemName, pPositionX);
-        newItem.Picked = 1;
-        ds.PickupItem(newItem);
-        List<Items> newItemList = new List<Items>();
-        newItemList.Add(newItem);
-        ds.jsnUpdateItems(newItemList);
-
-        // Find first open slot in inventory
-        //for (int i = 0; i < inventory.Count; i++)
-        //{
-        //    if (inventory[i].Id == 0)
-        //    {
-        //        inventory[i] = items[itemToAdd];
-        //        Debug.Log(inventory[i].Name + " was added!");
-        //        itemAdded = true;
-        //        break;
-        //    }
-
-        //    // If inventory was full
-        //    if (!itemAdded)
-        //    {
-        //        Debug.Log("Inventory Full - Item not Added");
-        //    }
-
-        //}
     }
 
     public static void LoadInventoryItems()
@@ -238,33 +204,40 @@ public static class GameModel
         int x = 1;
         foreach(Items i in inventory)
         {
-            Debug.Log("inventory item is " + i.Name);
-            invText = GameObject.Find("ItemText" + (Convert.ToString(x))).GetComponent<Text>();
-            invText.text = i.Name;
-            GameObject invItemImage = GameObject.Find("ItemImage" + (Convert.ToString(x)));
-            invItemImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("InvItems/" + i.Name);
-            x += 1;
+            try
+            {
+                Debug.Log("inventory item is " + i.Name);
+                invText = GameObject.Find("ItemText" + (Convert.ToString(x))).GetComponent<Text>();
+                invText.text = i.Name;
+                GameObject invItemImage = GameObject.Find("ItemImage" + (Convert.ToString(x)));
+                invItemImage.GetComponent<Image>().sprite = Resources.Load<Sprite>("InvItems/" + i.Name);
+                x += 1;
+            }
+            catch
+            {
+
+            }
+            
         }
-        //for (int i = 0; i < inventory.Count; i++)
-        //{
-        //    if (inventory[i].Id != 0)
-        //    {
-        //        invText = GameObject.Find("ItemText" + (Convert.ToString(i + 1))).GetComponent<Text>();
-        //        invText.text = inventory[i].Name;
-        //        GameObject invItemImage = GameObject.Find("ItemImage" + (Convert.ToString(i + 1)));
-        //        invItemImage.GetComponent<Image>().sprite = Resources.Load("ItemPrefabs/" + inventory[i].Name) as Sprite;
-        //    }
-        //    else
-        //    {
-        //        break;
-        //    }
-        //}
     }
 
     public static void UpdateDisplay()
     {
         storyHead.text = currentLocale.Name;
         storyNarrative.text = currentLocale.Story;
+    }
+
+    public static void Logout()
+    {
+        SpawnItems.UnloadGameObjects();
+        if (finished)
+        {
+            ds.DropItems();
+            SceneManager.LoadScene(0);
+        }
+            
+        
+        
     }
 }
 

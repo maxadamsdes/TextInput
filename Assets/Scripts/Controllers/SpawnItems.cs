@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class SpawnItems : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
     public static void LoadGameObjects()
     {
+        //List<Player> cPlayerList = new List<Player>();
+        //cPlayerList.Add(GameModel.cPlayer);
+        //GameModel.ds.jsnGetPlayerLocationItems(cPlayerList);
+        //System.Threading.Thread.Sleep(200);
         List<Items> locationItems = GameModel.ds.GetLocationItems(GameModel.cPlayer);
         foreach (Items item in locationItems)
         {
-            Vector3 itemPosition = new Vector3(item.PositionX, item.PositionY, 0);
-            Object newItem = Instantiate(Resources.Load("ItemPrefabs/" + item.Name), itemPosition, Quaternion.identity);
+            float positionX = float.Parse(item.PositionX);
+            float positionY = float.Parse(item.PositionY);
+            Vector3 itemPosition = new Vector3(positionX, positionY, 0);
+            Object newItem = Instantiate(Resources.Load("ItemPrefabs/" + item.Icon), itemPosition, Quaternion.identity);
             newItem.name = item.Name;
             Debug.Log("Loaded " + item.Name);
         }
@@ -34,6 +36,7 @@ public class SpawnItems : MonoBehaviour
             }
             
         }
+        GameModel.finished = true;
     }
 
 

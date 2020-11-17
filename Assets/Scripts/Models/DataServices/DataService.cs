@@ -120,15 +120,7 @@ public class DataService  {
         GameModel.jsDrop.Create<Location, JsnReceiver>(new Location
         {
             Name = "UUUUUUUUUUUUUUUUUUUU",
-            Story = "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU",
-            NEntryX = 00000000000000000000,
-            SEntryX = 00000000000000000000,
-            WEntryX = 00000000000000000000,
-            EEntryX = 00000000000000000000,
-            NEntryY = 00000000000000000000,
-            SEntryY = 00000000000000000000,
-            WEntryY = 00000000000000000000,
-            EEntryY  = 00000000000000000000
+            Story = "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU"
         }, jsnReceiverDel);
 
         GameModel.jsDrop.Create<Items, JsnReceiver>(new Items
@@ -137,8 +129,8 @@ public class DataService  {
             Name = "UUUUUUUUUUUUUUUU",
             Icon = "UUUUUUUUUUUUUUUU",
             LocationID = "UUUUUUUUUUUUUUUUUUUUUU",
-            PositionX = 000000,
-            PositionY = 000000,
+            PositionX = "UUUUUUUUUUUUUUUUUUUUUU",
+            PositionY = "UUUUUUUUUUUUUUUUUUUUUU",
             Picked = 0
         }, jsnReceiverDel);
     }
@@ -164,7 +156,33 @@ public class DataService  {
     {
         GameModel.jsDrop.Select<Player, JsnReceiver>("PlayerName = '" + pReceivedList[0].PlayerName + "'", jsnPlayerListReceiverDel, jsnReceiverDel);
     }
+    public void jsnGetAllPlayersScores()
+    {
+        GameModel.jsDrop.Select<Player, JsnReceiver>("Score >= 5", GameModel.populateScoreBoard.jsnPlayerHighScoreListReceiverDel, jsnReceiverDel);
+    }
 
+    public void jsnGetAllPlayers()
+    {
+        GameModel.jsDrop.Select<Player, JsnReceiver>("Score >= 0", jsnPlayersListReceiverDel, jsnReceiverDel);
+    }
+    public void jsnPlayerHighScoreListReceiverDel(List<Player> pReceivedList)
+    {
+        // Gives indication as to whether the update has worked
+        Debug.Log("Received items " + pReceivedList.Count);
+        foreach (Player lcReceived in pReceivedList)
+        {
+            Debug.Log("Received {" + lcReceived.PlayerName + "," + lcReceived.Password + "," + lcReceived.Score.ToString() + "," + lcReceived.LocationId.ToString() + "}");
+        }
+        
+    }
+    public void jsnPlayersListReceiverDel(List<Player> pReceivedList)
+    {
+        // Gives indication as to whether the update has worked
+        Debug.Log("Received items " + pReceivedList.Count);
+        _connection.DropTable<Player>();
+        _connection.CreateTable<Player>();
+        _connection.InsertAll(pReceivedList);
+    }
     public void jsnPlayerListReceiverDel(List<Player> pReceivedList)
     {
         // Gives indication as to whether the update has worked
@@ -205,13 +223,14 @@ public class DataService  {
         {
             Debug.Log("Received {" + lcReceived.PlayerName + "," + lcReceived.LocationID.ToString() + "," + lcReceived.Name + "," + lcReceived.PositionX + "," + lcReceived.Picked + "}");
         }
-        _connection.DeleteAll<Items>();
         _connection.InsertAll(pReceivedList);
     }
 
     // Updates the servers database when an item is changed
     public void jsnUpdateItems(List<Items> pReceivedList)
     {
+        // Wipes the old data from player record (acts as a failsafe for store)
+        GameModel.jsDrop.Delete<Items, JsnReceiver>("PlayerName = '" + pReceivedList[0].PlayerName + "'", jsnReceiverDel);
         // Stores the altered item in the servers db
         GameModel.jsDrop.Store<Items, JsnReceiver>(pReceivedList, jsnReceiverDel);
     }
@@ -230,7 +249,7 @@ public class DataService  {
 
     public List<Items> GetAllLocationItems(Player pPlayer)
     {
-        return _connection.Table<Items>().ToList<Items>(); ;
+        return _connection.Table<Items>().ToList<Items>();
     }
 
     public bool haveLocations()
@@ -254,7 +273,7 @@ public class DataService  {
         return GetLocation(aPlayer.LocationId);
     }
 
-    public void updatePlayerLocation(Player pPlayer)
+    public void updatePlayer(Player pPlayer)
     {
         _connection.InsertOrReplace(pPlayer);
         List<Player> PlayerList = new List<Player>();
@@ -268,20 +287,12 @@ public class DataService  {
         return _connection.Table<Location>().Where(l => l.Name == "Forest").FirstOrDefault();
     }
 
-    public Location storeNewLocation(string pName, string pStory, float pNEntryX, float pNEntryY, float pSEntryX, float pSEntryY, float pEEntryX, float pEEntryY, float pWEntryX, float pWEntryY)
+    public Location storeNewLocation(string pName, string pStory)
     {
         Location newLocation = new Location
         {
             Name = pName,
-            Story = pStory,
-            NEntryX = pNEntryX,
-            NEntryY = pNEntryY,
-            SEntryX = pSEntryX,
-            SEntryY = pSEntryY,
-            WEntryX = pWEntryX,
-            WEntryY = pWEntryY,
-            EEntryX = pEEntryX,
-            EEntryY = pEEntryY
+            Story = pStory
         };
         _connection.Insert(newLocation); // Store the location 
         //GameModel.currentLocale = newLocation;
@@ -327,7 +338,6 @@ public class DataService  {
         return _connection.Table<Player>().Where(x => x.PlayerName == pPlayerName).FirstOrDefault();
     }
 
-
     public void AddPlayerItem(Player pPlayer, Location pLocation, string pItemName)
     {
         Items newItem = new Items();
@@ -339,7 +349,8 @@ public class DataService  {
 
     public void AddPlayerItems(Player pPlayer)
     {
-        
+        _connection.DropTable<Items>();
+        _connection.CreateTable<Items>();
         // Creates the first new Item
         Items item = new Items
         {
@@ -347,8 +358,8 @@ public class DataService  {
             LocationID = "Forest",
             Name = "Coin",
             Icon = "Coin",
-            PositionX = -1f,
-            PositionY = 0f,
+            PositionX = "-1",
+            PositionY = "0",
             Picked = 0
         };
 
@@ -360,15 +371,14 @@ public class DataService  {
         item.addItem(pPlayer.PlayerName, "Cave", "Chest", "Chest", 11.868f, 0.2910001f, 0);
         item.addItem(pPlayer.PlayerName, "Cave", "Coin", "Coin", 8.63f, -2.57f, 0);
         item.addItem(pPlayer.PlayerName, "River", "Chest", "Chest", 23.31f, -1.529251f, 0);
-        item.addItem(pPlayer.PlayerName, "Highway", "Key", "Key", 6.2f, 0.56f, 0);
+        item.addItem(pPlayer.PlayerName, "House", "Key", "Key", 6.2f, 0.56f, 0);
         item.addItem(pPlayer.PlayerName, "Cave2", "Coin", "Coin", 15.86f, -0.18f, 0);
         item.addItem(pPlayer.PlayerName, "Beach", "Rune", "Rune", -4.9f, -1.79f, 0);
         item.addItem(pPlayer.PlayerName, "Ocean", "Chest", "Chest", 2.409f, -13.283f, 0);
-        item.addItem(pPlayer.PlayerName, "Ocean", "Chest2", "Chest", 8.25f, -17.74f, 0);
         item.addItem(pPlayer.PlayerName, "Ocean", "Key", "Key", -11.72f, -15.68f, 0);
-        // Creates a new list that new items can be added to
-        List<Items> newItemList = new List<Items>();
-        newItemList = GetAllLocationItems(pPlayer);
+        item.addItem(pPlayer.PlayerName, "Forest", "Door", "Door", -3.54f, -1.17f, 0);
+
+        List<Items> newItemList = GetAllLocationItems(pPlayer);
         jsnUpdateItems(newItemList);
 
     }
@@ -376,6 +386,8 @@ public class DataService  {
     // used for adding items to the database
     public Items storeNewPlayerItems(string pPlayerName, string pLocationID, string pItemName, string pIcon, float pPositionX, float pPositionY, int pPicked)
     {
+        string positionX = pPositionX.ToString();
+        string positionY = pPositionY.ToString();
         // Sets an item to match input
         Items newItem = new Items
         {
@@ -383,19 +395,15 @@ public class DataService  {
             LocationID = pLocationID,
             Name = pItemName,
             Icon = pIcon,
-            PositionX = pPositionX,
-            PositionY = pPositionY,
+            PositionX = positionX,
+            PositionY = positionY,
             Picked = pPicked
         };
         // Stores new item into database
         _connection.Insert(newItem);
+        
         // returns the item
         return newItem;
-    }
-
-    public void PickupItem(Items pItem)
-    {
-        _connection.InsertOrReplace(pItem);
     }
 
     
@@ -406,8 +414,16 @@ public class DataService  {
         List<Items> itemList = new List<Items>();
         // Attempts to retrieve an item from the local DB using given attributes
         Items item = GetItem(pPlayerName, pLocationID, pItemName, pPositionX);
+        _connection.Delete(item);
         // Changes the items state to be picked up
-        item.Picked = 1;
+        if(pItemName == "Chest")
+        {
+            item.Picked = 2;
+        }
+        else
+        {
+            item.Picked = 1;
+        }
         // Updates local db to match change
         _connection.InsertOrReplace(item);
         // Adds updated item to a list so that the jsnDrop is able to receive the data
@@ -415,15 +431,43 @@ public class DataService  {
         jsnUpdateItems(itemList);
     }
 
+    public void UseItem(Items pItem1, Items pItem2, Items pDoor)
+    {
+        _connection.Delete(pItem1);
+        _connection.Delete(pItem2);
+        _connection.Delete(pDoor);
+        pItem1.Picked = 2;
+        pItem2.Picked = 2;
+        pDoor.Picked = 2;
+        _connection.InsertOrReplace(pItem1);
+        _connection.InsertOrReplace(pItem2);
+        _connection.InsertOrReplace(pDoor);
+        List<Items> itemList = new List<Items>();
+        itemList = GetAllLocationItems(GameModel.cPlayer);
+        jsnUpdateItems(itemList);
+    }
+
     // Rertrieves an item from the local database that matches the description
     public Items GetItem(string pPlayerName, string pLocationID, string pItemName, float pPositionX)
-    { 
-        return _connection.Table<Items>().Where(x => x.PlayerName == pPlayerName && x.LocationID == pLocationID && x.Name == pItemName && x.PositionX == pPositionX).FirstOrDefault();
+    {
+        string positionX = pPositionX.ToString();
+        return _connection.Table<Items>().Where(x => x.PlayerName == pPlayerName && x.LocationID == pLocationID && x.Name == pItemName && x.PositionX == positionX).FirstOrDefault();
     }
 
     public List<Items> GetInventory(Player pPlayer)
     {
         return _connection.Table<Items>().Where(x => x.PlayerName == pPlayer.PlayerName && x.Picked == 1).ToList<Items>();
+    }
+
+    public Items GetItemToGive(string pPlayerName, string pItemName)
+    {
+        return _connection.Table<Items>().Where(x => x.PlayerName == pPlayerName && x.Name == pItemName && x.Picked == 1).FirstOrDefault();
+    }
+
+    public void DropItems()
+    {
+        _connection.DropTable<Items>();
+        _connection.CreateTable<Items>();
     }
 
 }

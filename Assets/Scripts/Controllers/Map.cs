@@ -32,7 +32,7 @@ public class Map : MonoBehaviour
             case "Beach":
                 dropdown = GameObject.Find("DropdownBeach").GetComponent<Dropdown>();
                 break;
-            case "Highway":
+            case "House":
                 dropdown = GameObject.Find("DropdownHighway").GetComponent<Dropdown>();
                 break;
             case "Cave2":
